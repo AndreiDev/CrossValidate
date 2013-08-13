@@ -8,10 +8,10 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'crossvalidate',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
-        'USER': 'andreii1_admin',
-        'PASSWORD': 'andreii1sar5248',
+        'USER': 'postgres',
+        'PASSWORD': 'psar5248',
         'HOST': 'localhost',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'PORT': '5432',                      # Set to empty string for default.
+        'PORT': '5248',                      # Set to empty string for default.
     }
 }
 
