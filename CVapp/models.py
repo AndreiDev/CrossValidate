@@ -15,11 +15,17 @@ class Interaction(models.Model):
     crossUsersRelevantData = models.TextField(max_length=500000)
     crossUsersFilteredData = models.TextField(max_length=500000)
     
+    def __unicode__(self):
+        return self.userName + ':' + self.interactionDateTime
+    
 class FollowBack(models.Model):
     interaction = models.ForeignKey(Interaction)
     crossFilteredId = models.CharField(max_length=10)
     followTime = models.DateTimeField()
     followBackTime = models.DateTimeField()
+        
+    def __unicode__(self):
+        return self.interaction
     
 class Parameters(models.Model):
     interaction = models.ForeignKey(Interaction)
@@ -33,4 +39,6 @@ class Parameters(models.Model):
     P_testAfter = models.IntegerField()
     P_validationThreshold = models.IntegerField()           
       
+    def __unicode__(self):
+        return self.interaction
     
