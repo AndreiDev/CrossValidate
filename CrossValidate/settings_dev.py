@@ -32,7 +32,7 @@ STATICFILES_DIRS = (
 )
 
 TEMPLATE_DIRS = (
-    "c:/andrei/wrokspace/github/crossvalidate/templates",
+    "c:/andrei/workspace/github/crossvalidate/templates",
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
