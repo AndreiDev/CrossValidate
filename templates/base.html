@@ -27,44 +27,9 @@
         
     </head>
 	<body id="home">
-
-		<!--
-		<nav>
-			<div id="top-nav" class="navbar navbar-fixed-top">
-			  <div class="navbar-inner">
-				<div class="container">	  		
-					<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-			  
-					<a class="brand" href={% url "homepage" %}>Hoedown</a>
-					
-					<div class="nav-collapse collapse">
-						<ul class="nav">						
-							{% block nav0 %}<li class="active"><a href={% url "homepage" %}>Home</a></li>{% endblock%}
-							<li class="divider-vertical"></li>
-							{% block nav1 %}<li><a id="id1" href=""><strong>menu1</strong></a></li>{% endblock%}			      	
-							{% block nav2 %}<li><a id="id2" href=""><strong>menu2</strong></a></li>{% endblock%}				    
-							{% block nav3 %}<li><a id="id3" href=""><strong>menu3</strong></a></li>{% endblock%}							
-                            <li class="divider-vertical"></li>                            
-						</ul>
-						<div id="navbar_login" class="pull-right">
-                            {% if user.is_authenticated %}
-                                <p>Welcome, <a href='{% url "homepage" %}' class="navbar-tt" data-placement="bottom" title="title1"><strong>{{ user.username }}</strong></a> | <a href='{% url "homepage" %}' class="navbar-tt" data-placement="bottom" title="Goodbye"><strong>logout</strong></a></p>
-                            {% else %}
-                                <p>Welcome. Please <a href='{% url "homepage" %}' class="navbar-tt" data-placement="bottom" title="title2"><strong>login</strong></a></p>
-                            {% endif %}
-						</div>
-					</div>
-				</div>
-			  </div>
-			</div>
-		</nav>-->
     
 	<!-- Navbar
-	  ================================================== -->
+	  ================================================== 
 	<div class="navbar navbar-fixed-top">
 	    <div class="navbar-inner">
 	        <div class="container">
@@ -94,7 +59,7 @@
 	            </div>
 	        </div>
 	    </div>
-	</div>    
+	</div>    -->
     
         <div id="body-container" class="container">
         
@@ -107,6 +72,7 @@
     {% endblock extra_body %}
         
         </div> <!-- /container -->
+        
         		<!-- FOOTER -->
 		<!--<footer>
 			<div class="navbar navbar-fixed-bottom">
