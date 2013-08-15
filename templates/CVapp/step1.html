@@ -9,13 +9,22 @@
                 <div class="hero-content">
                     <div class="row-fluid">
                         <div class="span12 text-center">
-                            <p>Hi {{ user }}, Let's create a CrossValidate job!</p> 
+                            <p>STEP 1. Hi {{ user }}, Let's create a CrossValidate job!</p> 
                         </div>
                     </div>                        
                 </div>
             </div>	
         </header>		
-            
+        <form class="form-horizontal" action="" method="post">{% csrf_token %}
+        {% for field in form %}
+            <div class="control-group field_container">
+                {{ field.errors }}
+                <label class="control-label"> {{ field.label_tag }} </label>
+                <div class="controls"> {{ field }} </div>
+            </div>    
+        {% endfor %}
+        <input class="btn" type="submit" value="Submit" />
+        </form>                  
 		<section>
         
 		</section>					

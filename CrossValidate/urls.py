@@ -8,10 +8,10 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^accounts/', include('allauth.urls')),
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout',{'next_page': '/homepage/'}),
-    url(r'^job/create/','CVapp.views.job_create',name='job_create'),
+    #url(r'^job/create/','CVapp.views.job_create',name='job_create'),
     #url(r'^job/view/','CVapp.views.job_view',name='job_view'),
     #url(r'^job/delete/','CVapp.views.job_delete',name='job_delete'),
-    url(r'^$', TemplateView.as_view(template_name='homepage.html'),name='homepage'),                     
+    url(r'^$', 'CVapp.views.homepage',name='homepage'),                     
     # Examples:
     # url(r'^$', 'CrossValidate.views.home', name='home'),
     # url(r'^CrossValidate/', include('CrossValidate.foo.urls')),

@@ -1,6 +1,5 @@
 from django.contrib import admin
-from CVapp.models import Interaction, FollowBack, Parameters
+from CVapp.models import Job, FollowBack
 
-admin.site.register(Interaction)
+admin.site.register(Job)
 admin.site.register(FollowBack)
-admin.site.register(Parameters)
