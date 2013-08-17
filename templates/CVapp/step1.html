@@ -15,7 +15,7 @@
                 </div>
             </div>	
         </header>		
-        <form class="form-horizontal" action="" method="post">{% csrf_token %}
+        <form id="pleaseWait" class="form-horizontal" action="" method="post">{% csrf_token %}
         {% for field in form %}
             <div class="control-group field_container">
                 {{ field.errors }}

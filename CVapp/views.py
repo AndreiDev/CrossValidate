@@ -70,22 +70,21 @@ def homepage(request):
                 if request.method == 'POST':
                     form = jobForm_step3(request.POST)
                     if form.is_valid():
-                        #userRecord.P_crossType = request.POST['P_crossType'] 
+                        userRecord.P_minFollowers = request.POST['P_minFollowers'] 
+                        userRecord.P_maxFollowers = request.POST['P_maxFollowers'] 
+                        userRecord.P_minFriends = request.POST['P_minFriends'] 
+                        userRecord.P_maxFriends = request.POST['P_maxFriends'] 
+                        userRecord.P_minFFratio = request.POST['P_minFFratio'] 
+                        userRecord.P_maxFFration = request.POST['P_maxFFration'] 
+                        userRecord.P_minNoTweets = request.POST['P_minNoTweets'] 
+                        userRecord.P_maxDays = request.POST['P_maxDays'] 
                         userRecord.jobStep = 4  
                         userRecord.save()
                         return redirect('homepage')
                 else:
                     form = jobForm_step3()
                     FFdata = {}
-                    #FFdata['subject1Name'] = userRecord.subject1Name
-                    #FFdata['subject2Name'] = userRecord.subject2Name
-                    #FFdata['userNoFollowers'] = userRecord.userNoFollowers
-                    #FFdata['userNoFriends'] = userRecord.userNoFriends
-                    #FFdata['subject1NoFollowers'] = userRecord.subject1NoFollowers
-                    #FFdata['subject1NoFriends'] = userRecord.subject1NoFriends
-                    #FFdata['subject2NoFollowers'] = userRecord.subject2NoFollowers
-                    #FFdata['subject2NoFriends'] = userRecord.subject2NoFriends 
-                    return render_to_response('CVapp/step3.html',{'form': form,'FFdata': FFdata},context_instance=RequestContext(request))  
+                    return render_to_response('CVapp/step3.html',{'form': form,'crossNum': len(userRecord.crossUsersRelevantData)},context_instance=RequestContext(request))  
             elif userRecord.jobStep == 4:
                 return render_to_response('CVapp/step4.html',context_instance=RequestContext(request))  
             elif userRecord.jobStep == 5:

@@ -1,5 +1,8 @@
 $(document).ready(function () {
 	
+	$('#pleaseWait').submit(function() {
+    $('#pleaseWait').replaceWith('<h2>Please Wait...</h2>');
+  });
 	// media query event handler
 	if (matchMedia) {
 		var mq = window.matchMedia("(max-width: 767px)");
