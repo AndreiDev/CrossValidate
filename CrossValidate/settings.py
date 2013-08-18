@@ -140,7 +140,7 @@ import djcelery
 djcelery.setup_loader()
 BROKER_URL = 'django://'
 
-#CELERY_TIMEZONE = 'UTC'
+CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
