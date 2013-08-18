@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block title %} Welcome ! {% endblock %}
+{% block head %}<meta http-equiv="refresh" content="5" />{% endblock %}
+{% block content %}
+    
+        <!-- Main hero  -->
+        <header>
+            <div class="hero-unit">
+                <div class="hero-content">
+                    <div class="row-fluid">
+                        <div class="span12 text-center">
+                            <p>STEP 1. Hi {{ user }}, Please wait...</p> 
+                            <p>{{log}}</p>
+                        </div>
+                    </div>                        
+                </div>
+            </div>	
+        </header>		
+		<section>
+        
+		</section>					
+{% endblock %}		     
+{% block extra_content %}
+		<div id="TBD_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="TBF_Modal" aria-hidden="true">
+
+		</div>	  
+{% endblock %}
