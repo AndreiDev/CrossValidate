@@ -130,15 +130,17 @@ INSTALLED_APPS = (
     'allauth.socialaccount',
     # ... include the providers you want to enable:
     'allauth.socialaccount.providers.twitter',
-    'djcelery',
-    'kombu.transport.django',
     'CVapp',
+    'djcelery',
+    'kombu.transport.django', 
+
 )
 
 import djcelery
 djcelery.setup_loader()
-
 BROKER_URL = 'django://'
+
+#CELERY_TIMEZONE = 'UTC'
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
