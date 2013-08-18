@@ -14,7 +14,6 @@ class Job(models.Model):
     subject2NoFriends = models.IntegerField(default=-1)
     crossUsersProgress = models.CharField(max_length=200,default='')
     crossUsersRelevantData = models.TextField(max_length=500000,default='',editable=False)
-    crossUsersFilteredData = models.TextField(max_length=500000,default='',editable=False)
     P_crossType = models.IntegerField(default=0)
     P_minFollowers = models.IntegerField(default=200)
     P_maxFollowers = models.IntegerField(default=30000)
@@ -34,9 +33,9 @@ class Job(models.Model):
 class FollowBack(models.Model):
     job = models.ForeignKey(Job)
     crossFilteredId = models.CharField(max_length=10)
-    followTime = models.DateTimeField()
-    followBackTime = models.DateTimeField()
+    followTime = models.DateTimeField(blank=True, null=True)
+    followBackTime = models.DateTimeField(blank=True, null=True)
         
     def __unicode__(self):
-        return self.job
+        return str(self.job)
     

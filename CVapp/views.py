@@ -154,7 +154,7 @@ def homepage(request):
                 else:
                     form = jobForm_step3(instance=userRecord)
                     rawData_relevant = ast.literal_eval(userRecord.crossUsersRelevantData)
-                    rawData_filtered = [userData for userData in rawData_relevant if (userData['followers_count']>userRecord.P_minFollowers and 
+                    rawIDs_filtered = [userData['id_str'] for userData in rawData_relevant if (userData['followers_count']>userRecord.P_minFollowers and 
                           userData['followers_count']<userRecord.P_maxFollowers and 
                           userData['friends_count']>userRecord.P_minFriends and 
                           userData['friends_count']<userRecord.P_maxFriends and                                                                          
@@ -163,9 +163,14 @@ def homepage(request):
                           userData['statuses_count']>userRecord.P_minNoTweets and 
                           (time.time() - time.mktime(time.strptime(userData['status']['created_at'],'%a %b %d %H:%M:%S +0000 %Y')))/60.0/60.0/24.0 < userRecord.P_maxDays \
                           )]
-                    userRecord.crossUsersFilteredData = rawData_filtered
+
+                    for rawID_filtered in rawIDs_filtered:
+                        newFollower = FollowBack(job = userRecord, crossFilteredId = rawID_filtered)
+                        newFollower.save()  
+                        
+                    userRecord.crossUsersRelevantData = ""                  
                     userRecord.save()
-                    return render_to_response('CVapp/step3.html',{'form': form,'crossNum': len(userRecord.crossUsersFilteredData)},context_instance=RequestContext(request))  
+                    return render_to_response('CVapp/step3.html',{'form': form,'crossNum': FollowBack.objects.filter(job_id=userRecord.id).count()},context_instance=RequestContext(request))  
             elif userRecord.jobStep == 4:
                 if request.method == 'POST':
                     form = jobForm_step4(request.POST)
@@ -178,7 +183,7 @@ def homepage(request):
                         return redirect('homepage')
                 else:
                     form = jobForm_step4()
-                    return render_to_response('CVapp/step4.html',{'form': form,'crossNum': len(ast.literal_eval(userRecord.crossUsersFilteredData))},context_instance=RequestContext(request))                 
+                    return render_to_response('CVapp/step4.html',{'form': form,'crossNum': FollowBack.objects.filter(job_id=userRecord.id).count()},context_instance=RequestContext(request))                 
             elif userRecord.jobStep == 5:
                 return render_to_response('CVapp/step5.html',context_instance=RequestContext(request))  
             else:
