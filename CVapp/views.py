@@ -6,8 +6,8 @@ from django.http import HttpResponseRedirect,Http404, HttpResponse
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from forms import jobForm_step1, jobForm_step2, jobForm_step3, jobForm_step4
-from models import Job, FollowBack
+from forms import jobForm_step1_subjects, jobForm_step2_crossType, jobForm_step3_params, jobForm_step5_valParams#, jobForm_step4_followUsers  
+from models import Job, CrossData
 from getFFcount import getFFcount
 import getCrossData
 from allauth.socialaccount.models import SocialLogin, SocialToken, SocialApp, SocialAccount
@@ -19,46 +19,46 @@ MY_KEYS = ['id_str','name','status','statuses_count','screen_name','description'
 
 def homepage(request):
     if request.user.is_authenticated():
-        activeJob = Job.objects.filter(userName=request.user)
-        if activeJob:
-            userRecord = activeJob[0]
+        Jobs = Job.objects.filter(userName=request.user)
+        if Jobs:
+            currentJob = Jobs[0]
             
             
-            if userRecord.jobStep == 1:
+            if currentJob.jobStep == 1:
                 if request.method == 'POST':
-                    form = jobForm_step1(request.POST)
+                    form = jobForm_step1_subjects(request.POST)
                     if form.is_valid():
-                        userRecord.jobStep = 2 
-                        userRecord.save()
-                        userRecord.subject1Name = request.POST['subject1Name']
-                        userRecord.subject2Name = request.POST['subject2Name']                       
+                        currentJob.jobStep = 2 
+                        currentJob.save()
+                        currentJob.subject1Name = request.POST['subject1Name']
+                        currentJob.subject2Name = request.POST['subject2Name']                       
                         userFFcount = getFFcount(str(request.user))
                         sub1FFcount = getFFcount(request.POST['subject1Name'])
                         sub2FFcount = getFFcount(request.POST['subject2Name'])
-                        userRecord.userNoFollowers = userFFcount[0]
-                        userRecord.userNoFriends = userFFcount[1]
-                        userRecord.subject1NoFollowers = sub1FFcount[0]
-                        userRecord.subject1NoFriends = sub1FFcount[1]
-                        userRecord.subject2NoFollowers = sub2FFcount[0]
-                        userRecord.subject2NoFriends = sub2FFcount[1]                            
-                        userRecord.save()
+                        currentJob.userNoFollowers = userFFcount[0]
+                        currentJob.userNoFriends = userFFcount[1]
+                        currentJob.subject1NoFollowers = sub1FFcount[0]
+                        currentJob.subject1NoFriends = sub1FFcount[1]
+                        currentJob.subject2NoFollowers = sub2FFcount[0]
+                        currentJob.subject2NoFriends = sub2FFcount[1]                            
+                        currentJob.save()
                         return redirect('homepage')
                 else:
-                    form = jobForm_step1()
-                    return render_to_response('CVapp/step1.html',{'form': form},context_instance=RequestContext(request))
+                    form = jobForm_step1_subjects()
+                    return render_to_response('CVapp/step1_subjects.html',{'form': form},context_instance=RequestContext(request))
             # LOADING DATA FOR PAGE 2
-            elif userRecord.userNoFollowers == -1 and userRecord.jobStep == 2:
+            elif currentJob.userNoFollowers == -1 and currentJob.jobStep == 2:
                 return render_to_response('CVapp/loading1.html',context_instance=RequestContext(request))
             
             
-            elif userRecord.jobStep == 2:
+            elif currentJob.jobStep == 2:
                 if request.method == 'POST':
-                    form = jobForm_step2(request.POST)
+                    form = jobForm_step2_crossType(request.POST)
                     if form.is_valid():
-                        userRecord.jobStep = 3  
-                        userRecord.save()
+                        currentJob.jobStep = 3  
+                        currentJob.save()
                         
-                        userRecord.P_crossType = request.POST['P_crossType'] 
+                        currentJob.P_crossType = request.POST['P_crossType'] 
                         
                         SocialAccountId = SocialAccount.objects.filter(user_id=request.user.id)[0].id 
                         APP_KEY = SocialApp.objects.filter(name='AndreiiTest')[0].client_id 
@@ -70,24 +70,24 @@ def homepage(request):
                         ### ***************** Getting Cross Users **************************
                         twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
                         
-                        sub0FollowersIds = getCrossData.getFollowersIds(twitter,userRecord.userName)
-                        userRecord.crossUsersProgress = userRecord.crossUsersProgress + '*'
-                        userRecord.save()
-                        sub1FollowersIds = getCrossData.getFollowersIds(twitter,userRecord.subject1Name)
-                        userRecord.crossUsersProgress = userRecord.crossUsersProgress + '*'
-                        userRecord.save()                       
-                        sub2FollowersIds = getCrossData.getFollowersIds(twitter,userRecord.subject2Name)
-                        userRecord.crossUsersProgress = userRecord.crossUsersProgress + '*'
-                        userRecord.save()                       
-                        sub0FriendsIds = getCrossData.getFriendsIds(twitter,userRecord.userName)
-                        userRecord.crossUsersProgress = userRecord.crossUsersProgress + '*'
-                        userRecord.save()
-                        sub1FriendsIds = getCrossData.getFriendsIds(twitter,userRecord.subject1Name)
-                        userRecord.crossUsersProgress = userRecord.crossUsersProgress + '*'
-                        userRecord.save()                        
-                        sub2FriendsIds = getCrossData.getFriendsIds(twitter,userRecord.subject2Name)    
-                        userRecord.crossUsersProgress = userRecord.crossUsersProgress + '*'
-                        userRecord.save()                        
+                        sub0FollowersIds = getCrossData.getFollowersIds(twitter,currentJob.userName)
+                        currentJob.crossUsersProgress = currentJob.crossUsersProgress + '*'
+                        currentJob.save()
+                        sub1FollowersIds = getCrossData.getFollowersIds(twitter,currentJob.subject1Name)
+                        currentJob.crossUsersProgress = currentJob.crossUsersProgress + '*'
+                        currentJob.save()                       
+                        sub2FollowersIds = getCrossData.getFollowersIds(twitter,currentJob.subject2Name)
+                        currentJob.crossUsersProgress = currentJob.crossUsersProgress + '*'
+                        currentJob.save()                       
+                        sub0FriendsIds = getCrossData.getFriendsIds(twitter,currentJob.userName)
+                        currentJob.crossUsersProgress = currentJob.crossUsersProgress + '*'
+                        currentJob.save()
+                        sub1FriendsIds = getCrossData.getFriendsIds(twitter,currentJob.subject1Name)
+                        currentJob.crossUsersProgress = currentJob.crossUsersProgress + '*'
+                        currentJob.save()                        
+                        sub2FriendsIds = getCrossData.getFriendsIds(twitter,currentJob.subject2Name)    
+                        currentJob.crossUsersProgress = currentJob.crossUsersProgress + '*'
+                        currentJob.save()                        
                         
                         ids_list = list(set(sub1FollowersIds).intersection(set(sub2FollowersIds)).intersection(set(sub1FriendsIds)).intersection(set(sub2FriendsIds)).difference(set(sub0FriendsIds)).difference(set(sub0FollowersIds)))
                         
@@ -103,8 +103,8 @@ def homepage(request):
                             chosenUsers = []
                             for jj in range(len(followersIds_id_groups)):
                                 print jj
-                                userRecord.crossUsersProgress = userRecord.crossUsersProgress + '*'
-                                userRecord.save()                                
+                                currentJob.crossUsersProgress = currentJob.crossUsersProgress + '*'
+                                currentJob.save()                                
                                 rawData = getCrossData.twitterLookupUser(twitter,user_id=', '.join([str(e) for e in followersIds_id_groups[jj]]),include_entities='false')
                                 rawData_has_keys = [userData for userData in rawData if set(MY_KEYS).issubset(userData.keys())]
                                 rawData_relevant = [{your_key: userData[your_key] for your_key in MY_KEYS} for userData in rawData_has_keys]
@@ -113,88 +113,108 @@ def homepage(request):
                             chosenUsers = '0'
                         ### *****************************************************************                     
                         
-                        userRecord.crossUsersRelevantData = chosenUsers
-                        userRecord.save()
+                        currentJob.crossUsersRelevantData = chosenUsers
+                        currentJob.save()
                         return redirect('homepage')
                 else:
-                    form = jobForm_step2()
+                    form = jobForm_step2_crossType()
                     FFdata = {}
-                    FFdata['subject1Name'] = userRecord.subject1Name
-                    FFdata['subject2Name'] = userRecord.subject2Name
-                    FFdata['userNoFollowers'] = userRecord.userNoFollowers
-                    FFdata['userNoFriends'] = userRecord.userNoFriends
-                    FFdata['subject1NoFollowers'] = userRecord.subject1NoFollowers
-                    FFdata['subject1NoFriends'] = userRecord.subject1NoFriends
-                    FFdata['subject2NoFollowers'] = userRecord.subject2NoFollowers
-                    FFdata['subject2NoFriends'] = userRecord.subject2NoFriends 
-                    return render_to_response('CVapp/step2.html',{'form': form,'FFdata': FFdata},context_instance=RequestContext(request))  
+                    FFdata['subject1Name'] = currentJob.subject1Name
+                    FFdata['subject2Name'] = currentJob.subject2Name
+                    FFdata['userNoFollowers'] = currentJob.userNoFollowers
+                    FFdata['userNoFriends'] = currentJob.userNoFriends
+                    FFdata['subject1NoFollowers'] = currentJob.subject1NoFollowers
+                    FFdata['subject1NoFriends'] = currentJob.subject1NoFriends
+                    FFdata['subject2NoFollowers'] = currentJob.subject2NoFollowers
+                    FFdata['subject2NoFriends'] = currentJob.subject2NoFriends 
+                    return render_to_response('CVapp/step2_crossType.html',{'form': form,'FFdata': FFdata},context_instance=RequestContext(request))  
             # LOADING DATA FOR PAGE 3
-            elif not userRecord.crossUsersRelevantData and userRecord.jobStep == 3:
-                log = userRecord.crossUsersProgress
+            elif not currentJob.crossUsersRelevantData and currentJob.jobStep == 3:
+                log = currentJob.crossUsersProgress
                 return render_to_response('CVapp/loading2.html',{'log': log},context_instance=RequestContext(request))
             
-            elif userRecord.jobStep == 3:
+            
+            elif currentJob.jobStep == 3:
                 if request.method == 'POST':
-                    form = jobForm_step3(request.POST,instance=userRecord)
+                    form = jobForm_step3_params(request.POST,instance=currentJob)
                     if form.is_valid():
-                        userRecord.P_minFollowers = request.POST['P_minFollowers'] 
-                        userRecord.P_maxFollowers = request.POST['P_maxFollowers'] 
-                        userRecord.P_minFriends = request.POST['P_minFriends'] 
-                        userRecord.P_maxFriends = request.POST['P_maxFriends'] 
-                        userRecord.P_minFFratio = request.POST['P_minFFratio'] 
-                        userRecord.P_maxFFratio = request.POST['P_maxFFratio'] 
-                        userRecord.P_minNoTweets = request.POST['P_minNoTweets'] 
-                        userRecord.P_maxDays = request.POST['P_maxDays'] 
+                        currentJob.P_minFollowers = request.POST['P_minFollowers'] 
+                        currentJob.P_maxFollowers = request.POST['P_maxFollowers'] 
+                        currentJob.P_minFriends = request.POST['P_minFriends'] 
+                        currentJob.P_maxFriends = request.POST['P_maxFriends'] 
+                        currentJob.P_minFFratio = request.POST['P_minFFratio'] 
+                        currentJob.P_maxFFratio = request.POST['P_maxFFratio'] 
+                        currentJob.P_minNoTweets = request.POST['P_minNoTweets'] 
+                        currentJob.P_maxDays = request.POST['P_maxDays'] 
                         if 'recalculate' in request.POST:
-                            userRecord.jobStep = 3
+                            currentJob.jobStep = 3
                         else:
-                            userRecord.jobStep = 4
-                        userRecord.save()
+                            currentJob.jobStep = 4
+                        currentJob.save()
                         return redirect('homepage')
                 else:
-                    form = jobForm_step3(instance=userRecord)
-                    rawData_relevant = ast.literal_eval(userRecord.crossUsersRelevantData)
-                    rawIDs_filtered = [userData['id_str'] for userData in rawData_relevant if (userData['followers_count']>userRecord.P_minFollowers and 
-                          userData['followers_count']<userRecord.P_maxFollowers and 
-                          userData['friends_count']>userRecord.P_minFriends and 
-                          userData['friends_count']<userRecord.P_maxFriends and                                                                          
-                          (float(userData['followers_count'])/float(userData['friends_count']))>userRecord.P_minFFratio and 
-                          (float(userData['followers_count'])/float(userData['friends_count']))<userRecord.P_maxFFratio and 
-                          userData['statuses_count']>userRecord.P_minNoTweets and 
-                          (time.time() - time.mktime(time.strptime(userData['status']['created_at'],'%a %b %d %H:%M:%S +0000 %Y')))/60.0/60.0/24.0 < userRecord.P_maxDays \
+                    form = jobForm_step3_params(instance=currentJob)
+                    rawData_relevant = ast.literal_eval(currentJob.crossUsersRelevantData)
+                    rawData_filtered = [userData for userData in rawData_relevant if (userData['followers_count']>currentJob.P_minFollowers and 
+                          userData['followers_count']<currentJob.P_maxFollowers and 
+                          userData['friends_count']>currentJob.P_minFriends and 
+                          userData['friends_count']<currentJob.P_maxFriends and                                                                          
+                          (float(userData['followers_count'])/float(userData['friends_count']))>currentJob.P_minFFratio and 
+                          (float(userData['followers_count'])/float(userData['friends_count']))<currentJob.P_maxFFratio and 
+                          userData['statuses_count']>currentJob.P_minNoTweets and 
+                          (time.time() - time.mktime(time.strptime(userData['status']['created_at'],'%a %b %d %H:%M:%S +0000 %Y')))/60.0/60.0/24.0 < currentJob.P_maxDays \
                           )]
 
-                    for rawID_filtered in rawIDs_filtered:
-                        newFollower = FollowBack(job = userRecord, crossFilteredId = rawID_filtered)
-                        newFollower.save()  
-                        
-                    userRecord.crossUsersRelevantData = ""                  
-                    userRecord.save()
-                    return render_to_response('CVapp/step3.html',{'form': form,'crossNum': FollowBack.objects.filter(job_id=userRecord.id).count()},context_instance=RequestContext(request))  
-            elif userRecord.jobStep == 4:
+                    for crossUser in rawData_filtered:
+                        newCrossUser = CrossData(job = currentJob, id_str = crossUser['id_str'], name = crossUser['name'], screenName = crossUser['screen_name'], 
+                                                description = crossUser['description'], imageLink = crossUser['profile_image_url'], 
+                                                statusesCount = crossUser['statuses_count'], followersCount = crossUser['followers_count'], 
+                                                friendsCount = crossUser['friends_count'], toFollow = True)
+                        newCrossUser.save()  
+                   
+                    currentJob.crossUsersRelevantData = ""  # Free some space from the DB                
+                    currentJob.save()
+                    return render_to_response('CVapp/step3_params.html',{'form': form,'crossNum': CrossData.objects.filter(job_id=currentJob.id).count()},context_instance=RequestContext(request))  
+            
+            
+            elif currentJob.jobStep == 4:
                 if request.method == 'POST':
-                    form = jobForm_step4(request.POST)
+                    FollowUsersList = request.POST.getlist('follow')
+                    deletedCrossDatas = CrossData.objects.filter(job=currentJob).exclude(id_str__in=FollowUsersList) 
+                    for deletedCrossData in deletedCrossDatas:
+                        deletedCrossData.delete()
+                    currentJob.jobStep = 5                        
+                    currentJob.save()
+                    return redirect('homepage')
+                else:
+                    #formFollowUsers = jobForm_step4_followUsers(request.POST)
+                    crossUsersData = CrossData.objects.filter(job=currentJob)
+                    return render_to_response('CVapp/step4_followUsers.html',{'crossUsersData': crossUsersData},context_instance=RequestContext(request))                 
+            
+            
+            elif currentJob.jobStep == 5:
+                if request.method == 'POST':
+                    form = jobForm_step5_valParams(request.POST)
                     if form.is_valid():
-                        userRecord.P_unfollowAfter = request.POST['P_unfollowAfter'] 
-                        userRecord.P_testAfter = request.POST['P_testAfter'] 
-                        userRecord.P_validationThreshold = request.POST['P_validationThreshold']    
-                        userRecord.jobStep = 5                        
-                        userRecord.save()
+                        currentJob.P_validationDays = request.POST['P_validationDays'] 
+                        currentJob.P_validationThreshold = request.POST['P_validationThreshold']    
+                        currentJob.jobStep = 6                        
+                        currentJob.save()
                         return redirect('homepage')
                 else:
-                    form = jobForm_step4()
-                    return render_to_response('CVapp/step4.html',{'form': form,'crossNum': FollowBack.objects.filter(job_id=userRecord.id).count()},context_instance=RequestContext(request))                 
-            elif userRecord.jobStep == 5:
-                return render_to_response('CVapp/step5.html',context_instance=RequestContext(request))  
+                    form = jobForm_step5_valParams()     
+                    return render_to_response('CVapp/step5_validationParameters.html',{'form': form,'crossNum': CrossData.objects.filter(job_id=currentJob.id).count()}, context_instance=RequestContext(request))  
+            
+            
             else:
-                userRecord.jobStep = 1
-                userRecord.save()
-                form = jobForm_step1()
-                return render_to_response('CVapp/step1.html',{'form': form},context_instance=RequestContext(request))                                                 
+                currentJob.jobStep = 1
+                currentJob.save()
+                form = jobForm_step1_subjects()
+                return render_to_response('CVapp/step1_subjects.html',{'form': form},context_instance=RequestContext(request))                                                 
         else:
             newJob = Job(userName=request.user,jobStep=1)
             newJob.save()
-            form = jobForm_step1()
-            return render_to_response('CVapp/step1.html',{'form': form},context_instance=RequestContext(request))         
+            form = jobForm_step1_subjects()
+            return render_to_response('CVapp/step1_subjects.html',{'form': form},context_instance=RequestContext(request))         
     else:        
         return render_to_response('homepage.html',context_instance=RequestContext(request))

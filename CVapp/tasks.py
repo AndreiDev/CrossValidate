@@ -1,9 +1,9 @@
-from models import Job, FollowBack
+from models import Job, CrossData
 from celery import task
 
 @task()
 def FollowUserById():
     newJob = Job(userName='wow',jobStep=1)
     newJob.save()
-    newFollower = FollowBack(job = newJob, crossFilteredId = '')
+    newFollower = CrossData(job = newJob, crossFilteredId = '')
     newFollower.save()

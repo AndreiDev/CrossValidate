@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block title %} Welcome ! {% endblock %}
+{% block content %}
+    
+        <!-- Main hero  -->
+        <header>
+            <div class="hero-unit">
+                <div class="hero-content">
+                    <div class="row-fluid">
+                        <div class="span12 text-center">
+                            <p>Hi {{ user }}! Step 4.</p> 
+                        </div>
+                        <div class="span12 text-center">
+                            <p>You are going to follow {{crossNum}} users</p>
+                        </div>                        
+                    </div>                        
+                </div>
+            </div>	
+        </header>		
+        
+        <table class="table table-striped table-hover">
+        <tr>
+            <th><p>Pic</p></th>
+            <th><p>Name</p></th>
+            <th><p>Description</p></th>
+            <th><p>Statuses</p></th>
+            <th><p>Followers</p></th>
+            <th><p>Following</p></th>
+            <th><p>Follow???</p></th>
+        </tr>
+          <form class="form-horizontal" action="" method="post">{% csrf_token %}
+            {% for crossUserData in crossUsersData %}
+                <tr>            
+                    <td><img src="{{ crossUserData.imageLink }}" width="80" height="80"/></td>
+                    <td><a href="https://twitter.com/{{ crossUserData.screenName }}" target="_blank">{{ crossUserData.name }}</a></td>
+                    <td><p>{{ crossUserData.description }}</p></td>
+                    <td><p>{{ crossUserData.statusesCount }}</p></td>
+                    <td><p>{{ crossUserData.followersCount }}</p></td>
+                    <td><p>{{ crossUserData.friendsCount }}</p></td>
+                    <td><input type="checkbox" name="follow" checked={{ crossUserData.toFollow }} value={{ crossUserData.id_str }}></input></td>
+                </tr>
+            {% endfor %}
+            <input class="btn" type="submit" name="submit" value="Submit" />
+          </form>         
+        </table>
+
+		<section>
+
+		</section>					
+{% endblock %}		     
+{% block extra_content %}
+		<div id="TBD_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="TBF_Modal" aria-hidden="true">
+
+		</div>	  
+{% endblock %}
