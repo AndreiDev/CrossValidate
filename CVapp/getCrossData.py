@@ -11,7 +11,7 @@ def twitter_retry(func):
             except (TwythonError, TwythonRateLimitError, Exception) as e:
                 if "Rate limit" in str(e): 
                     print e
-                    print fkwargs['limit_rate_string']
+                    #print fkwargs['limit_rate_string']
                     print 'sleeping for ' + str(rate_limit_timeout) + ' seconds'
                     time.sleep(rate_limit_timeout)
                 else:
@@ -31,6 +31,10 @@ def twitterGetFriendsIds(twitter,**params):
 @twitter_retry
 def twitterLookupUser(twitter,**params):
     return twitter.lookup_user(**params)
+
+@twitter_retry
+def twitterCreateFriendship(twitter,**params):
+    return twitter.create_friendship(**params)
 
 def getFollowersIds(twitter,subjectScreenName):
     print '*** getting the followers of ' + subjectScreenName
@@ -62,5 +66,8 @@ def getFriendsIds(twitter,subjectScreenName):
         friendsIds_ids = friendsIds_ids + friendsIds_raw['ids']    
     return friendsIds_ids    
 
-
+def followUser(twitter, subjectName):
+    print '*** following ' + subjectName
+    return twitterCreateFriendship(twitter,screen_name=subjectName)
+    
     

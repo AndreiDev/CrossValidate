@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block title %} Welcome ! {% endblock %}
+{% block content %}
+    
+        <!-- Main hero  -->
+        <header>
+            <div class="hero-unit">
+                <div class="hero-content">
+                    <div class="row-fluid">
+                        <div class="span12 text-center">
+                            <p>Hi {{ user }}!</p>
+		                    {% if isJobActive %}
+		                    	<p>Active Job</p> 
+		                    	<p>By now your validation ratio is {{ validationRatio }}</p>
+		                    	<p>Remeber that your goal is to reach {{ P_validationThreshold }}</p>
+		                    {% else %}
+		                    	<p>This job is over</p> 
+		                    	{% if validationRatio > P_validationThreshold %}
+		                    		<p>SUCCESS!!!</p>
+		                    	{% else %}
+		                    		<p>Too bad...</p>
+		                    	{% endif %}
+		                    	<p>You have reached a validation ratio of {{ validationRatio }}</p>
+		                    	<p>While you goal was {{ P_validationThreshold }}</p>
+		                    {% endif %}                              
+                            
+                        </div>
+                        <div class="span12 text-center">
+                            <p>Following statistics</p>
+                        </div>                        
+                    </div>                        
+                </div>
+            </div>	
+        </header>		
+        
+	        <table class="table table-striped">
+	        <tr>
+	            <th><p>Pic</p></th>
+	            <th><p>Name</p></th>
+	            <th><p>You followed at</p></th>
+	            <th><p>Followed you at</p></th>
+	        </tr>
+	          
+	            {% for crossUserFollowData in crossUsersFollowData %}
+	                <tr>            
+	                    <td><img src="{{ crossUserFollowData.imageLink }}" width="80" height="80"/></td>
+	                    <td><a href="https://twitter.com/{{ crossUserFollowData.screenName }}" target="_blank">{{ crossUserFollowData.name }}</a></td>
+	                    <td><p>{{ crossUserFollowData.followTime }}</p></td>
+	                    {% if crossUserFollowData.followBackTime %}
+	                    	<td><p>{{ crossUserFollowData.followBackTime }}</p></td>
+	                    {% else %}
+	                    	<td><p>not yet</p></td>	 
+	                    {% endif %}                   
+	                </tr>
+	            {% endfor %}	            	                  
+	    	</table>
+	    <form class="form-horizontal" action="" method="post">{% csrf_token %}
+	    	<input class="btn" type="submit" name="delete" value="Delete Job" />
+		</form> 
+		<section>
+
+		</section>					
+{% endblock %}		     
+{% block extra_content %}
+		<div id="TBD_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="TBF_Modal" aria-hidden="true">
+
+		</div>	  
+{% endblock %}

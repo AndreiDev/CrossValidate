@@ -14,6 +14,7 @@ from allauth.socialaccount.models import SocialLogin, SocialToken, SocialApp, So
 from twython import Twython, TwythonError, TwythonRateLimitError
 import time
 import ast
+import tasks #delme!!!
 
 MY_KEYS = ['id_str','name','status','statuses_count','screen_name','description','profile_image_url','follow_request_sent','followers_count','friends_count','verified']
 
@@ -106,8 +107,8 @@ def homepage(request):
                                 currentJob.crossUsersProgress = currentJob.crossUsersProgress + '*'
                                 currentJob.save()                                
                                 rawData = getCrossData.twitterLookupUser(twitter,user_id=', '.join([str(e) for e in followersIds_id_groups[jj]]),include_entities='false')
-                                rawData_has_keys = [userData for userData in rawData if set(MY_KEYS).issubset(userData.keys())]
-                                rawData_relevant = [{your_key: userData[your_key] for your_key in MY_KEYS} for userData in rawData_has_keys]
+                                rawData_has_keys = [aJob for aJob in rawData if set(MY_KEYS).issubset(aJob.keys())]
+                                rawData_relevant = [{your_key: aJob[your_key] for your_key in MY_KEYS} for aJob in rawData_has_keys]
                                 chosenUsers = chosenUsers + rawData_relevant   
                         else:
                             chosenUsers = '0'
@@ -149,46 +150,54 @@ def homepage(request):
                         if 'recalculate' in request.POST:
                             currentJob.jobStep = 3
                         else:
+                            rawData_relevant = ast.literal_eval(currentJob.crossUsersRelevantData)
+                            rawData_filtered = [aJob for aJob in rawData_relevant if (int(aJob['followers_count'])>int(currentJob.P_minFollowers) and 
+                                  int(aJob['followers_count'])<int(currentJob.P_maxFollowers) and 
+                                  int(aJob['friends_count'])>int(currentJob.P_minFriends) and 
+                                  int(aJob['friends_count'])<int(currentJob.P_maxFriends) and                                                                          
+                                  (float(aJob['followers_count'])/float(aJob['friends_count']))>float(currentJob.P_minFFratio) and 
+                                  (float(aJob['followers_count'])/float(aJob['friends_count']))<float(currentJob.P_maxFFratio) and 
+                                  int(aJob['statuses_count'])>int(currentJob.P_minNoTweets) and 
+                                  (time.time() - time.mktime(time.strptime(aJob['status']['created_at'],'%a %b %d %H:%M:%S +0000 %Y')))/60.0/60.0/24.0 < int(currentJob.P_maxDays) \
+                                  )]
+        
+                            for crossUser in rawData_filtered:
+                                newCrossUser = CrossData(job = currentJob, id_str = crossUser['id_str'], name = crossUser['name'], screenName = crossUser['screen_name'], 
+                                                        description = crossUser['description'], imageLink = crossUser['profile_image_url'], 
+                                                        statusesCount = crossUser['statuses_count'], followersCount = crossUser['followers_count'], 
+                                                        friendsCount = crossUser['friends_count'], toFollow = True)
+                                newCrossUser.save()                              
                             currentJob.jobStep = 4
+                            currentJob.crossUsersRelevantData = ""   #Free some space from the DB                                          
                         currentJob.save()
                         return redirect('homepage')
                 else:
                     form = jobForm_step3_params(instance=currentJob)
                     rawData_relevant = ast.literal_eval(currentJob.crossUsersRelevantData)
-                    rawData_filtered = [userData for userData in rawData_relevant if (userData['followers_count']>currentJob.P_minFollowers and 
-                          userData['followers_count']<currentJob.P_maxFollowers and 
-                          userData['friends_count']>currentJob.P_minFriends and 
-                          userData['friends_count']<currentJob.P_maxFriends and                                                                          
-                          (float(userData['followers_count'])/float(userData['friends_count']))>currentJob.P_minFFratio and 
-                          (float(userData['followers_count'])/float(userData['friends_count']))<currentJob.P_maxFFratio and 
-                          userData['statuses_count']>currentJob.P_minNoTweets and 
-                          (time.time() - time.mktime(time.strptime(userData['status']['created_at'],'%a %b %d %H:%M:%S +0000 %Y')))/60.0/60.0/24.0 < currentJob.P_maxDays \
+                    rawData_filtered = [aJob for aJob in rawData_relevant if (int(aJob['followers_count'])>int(currentJob.P_minFollowers) and 
+                          int(aJob['followers_count'])<int(currentJob.P_maxFollowers) and 
+                          int(aJob['friends_count'])>int(currentJob.P_minFriends) and 
+                          int(aJob['friends_count'])<int(currentJob.P_maxFriends) and                                                                          
+                          (float(aJob['followers_count'])/float(aJob['friends_count']))>float(currentJob.P_minFFratio) and 
+                          (float(aJob['followers_count'])/float(aJob['friends_count']))<float(currentJob.P_maxFFratio) and 
+                          int(aJob['statuses_count'])>int(currentJob.P_minNoTweets) and 
+                          (time.time() - time.mktime(time.strptime(aJob['status']['created_at'],'%a %b %d %H:%M:%S +0000 %Y')))/60.0/60.0/24.0 < int(currentJob.P_maxDays) \
                           )]
-
-                    for crossUser in rawData_filtered:
-                        newCrossUser = CrossData(job = currentJob, id_str = crossUser['id_str'], name = crossUser['name'], screenName = crossUser['screen_name'], 
-                                                description = crossUser['description'], imageLink = crossUser['profile_image_url'], 
-                                                statusesCount = crossUser['statuses_count'], followersCount = crossUser['followers_count'], 
-                                                friendsCount = crossUser['friends_count'], toFollow = True)
-                        newCrossUser.save()  
                    
-                    currentJob.crossUsersRelevantData = ""  # Free some space from the DB                
-                    currentJob.save()
-                    return render_to_response('CVapp/step3_params.html',{'form': form,'crossNum': CrossData.objects.filter(job_id=currentJob.id).count()},context_instance=RequestContext(request))  
+                    return render_to_response('CVapp/step3_params.html',{'form': form,'crossNum': len(rawData_filtered)},context_instance=RequestContext(request))  
             
             
             elif currentJob.jobStep == 4:
                 if request.method == 'POST':
                     FollowUsersList = request.POST.getlist('follow')
-                    deletedCrossDatas = CrossData.objects.filter(job=currentJob).exclude(id_str__in=FollowUsersList) 
-                    for deletedCrossData in deletedCrossDatas:
-                        deletedCrossData.delete()
+                    toDeleteCrossDatas = CrossData.objects.filter(job=currentJob).exclude(id_str__in=FollowUsersList) 
+                    for toDeleteCrossData in toDeleteCrossDatas:
+                        toDeleteCrossData.delete()
                     currentJob.jobStep = 5                        
                     currentJob.save()
                     return redirect('homepage')
                 else:
-                    #formFollowUsers = jobForm_step4_followUsers(request.POST)
-                    crossUsersData = CrossData.objects.filter(job=currentJob)
+                    crossUsersData = CrossData.objects.filter(job=currentJob).order_by('followersCount')
                     return render_to_response('CVapp/step4_followUsers.html',{'crossUsersData': crossUsersData},context_instance=RequestContext(request))                 
             
             
@@ -198,14 +207,26 @@ def homepage(request):
                     if form.is_valid():
                         currentJob.P_validationDays = request.POST['P_validationDays'] 
                         currentJob.P_validationThreshold = request.POST['P_validationThreshold']    
-                        currentJob.jobStep = 6                        
+                        currentJob.jobStep = 10                        
                         currentJob.save()
-                        return redirect('homepage')
+                        return redirect('homepage')                
                 else:
                     form = jobForm_step5_valParams()     
                     return render_to_response('CVapp/step5_validationParameters.html',{'form': form,'crossNum': CrossData.objects.filter(job_id=currentJob.id).count()}, context_instance=RequestContext(request))  
+
+
+            elif currentJob.jobStep == 10:
+                if request.method == 'POST':
+                    toDeleteCrossDatas = CrossData.objects.filter(job=currentJob) 
+                    for toDeleteCrossData in toDeleteCrossDatas:
+                        toDeleteCrossData.delete()                    
+                    currentJob.delete()    
+                    return redirect('homepage') 
+                else:
+                    crossUsersFollowData = CrossData.objects.filter(job=currentJob).exclude(followTime=None).order_by('followTime')                       
+                    return render_to_response('CVapp/activeJob.html',{'isJobActive':currentJob.isJobActive ,'validationRatio':currentJob.validationRatio, 'P_validationThreshold':currentJob.P_validationThreshold, 'crossUsersFollowData': crossUsersFollowData},context_instance=RequestContext(request))       
             
-            
+
             else:
                 currentJob.jobStep = 1
                 currentJob.save()

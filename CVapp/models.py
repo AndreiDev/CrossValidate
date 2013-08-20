@@ -15,7 +15,7 @@ class Job(models.Model):
     crossUsersProgress = models.CharField(max_length=200,default='')
     crossUsersRelevantData = models.TextField(max_length=500000,default='',editable=False)
     isJobActive = models.BooleanField(default=True)
-    validationRatio = models.FloatField(default=-1.0)
+    validationRatio = models.FloatField(default=0.0)
     P_crossType = models.IntegerField(default=0)
     P_minFollowers = models.IntegerField(default=200)
     P_maxFollowers = models.IntegerField(default=30000)
@@ -42,7 +42,8 @@ class CrossData(models.Model):
     followersCount = models.IntegerField()
     friendsCount = models.IntegerField()
     toFollow = models.BooleanField(default=True)
-    followTime = models.DateTimeField(blank=True, null=True)    
+    followTime = models.DateTimeField(blank=True, null=True)
+    followBackTime = models.DateTimeField(blank=True, null=True)
     toUnfollow = models.BooleanField(default=True)
     unFollowTime = models.DateTimeField(blank=True, null=True)
         
