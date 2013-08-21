@@ -1,11 +1,14 @@
 from django.db import models
+from django.core.validators import RegexValidator
 
 class Job(models.Model):
+    alphanumeric = RegexValidator(r'^[0-9a-zA-Z]*$', 'Only alphanumeric characters are allowed.')
+    
     jobDateTime = models.DateTimeField(auto_now_add=True)
     jobStep = models.IntegerField(editable=False)
-    userName = models.CharField(max_length=200)
-    subject1Name = models.CharField(max_length=200,default='')
-    subject2Name = models.CharField(max_length=200,default='')   
+    userName = models.CharField(max_length=15, validators=[alphanumeric])
+    subject1Name = models.CharField(max_length=15,default='', validators=[alphanumeric])
+    subject2Name = models.CharField(max_length=15,default='', validators=[alphanumeric])   
     userNoFollowers = models.IntegerField(default=-1)
     userNoFriends = models.IntegerField(default=-1)
     subject1NoFollowers = models.IntegerField(default=-1)

@@ -36,6 +36,19 @@ def homepage(request):
                         userFFcount = getFFcount(str(request.user))
                         sub1FFcount = getFFcount(request.POST['subject1Name'])
                         sub2FFcount = getFFcount(request.POST['subject2Name'])
+                        # Checking for invalid usernames
+                        if not sub1FFcount or not sub2FFcount:
+                            if not sub1FFcount and not sub2FFcount:
+                                message = 'Both usernames are invalid'                  
+                            elif not sub1FFcount:
+                                message = 'First username is invalid'                        
+                            elif not sub2FFcount:                          
+                                message = 'Second username is invalid'
+                            currentJob.jobStep = 1 
+                            currentJob.save()                                
+                            return render_to_response('CVapp/step1_subjects.html',{'form': form,'message': message},context_instance=RequestContext(request))
+                            
+                        
                         currentJob.userNoFollowers = userFFcount[0]
                         currentJob.userNoFriends = userFFcount[1]
                         currentJob.subject1NoFollowers = sub1FFcount[0]
@@ -44,6 +57,10 @@ def homepage(request):
                         currentJob.subject2NoFriends = sub2FFcount[1]                            
                         currentJob.save()
                         return redirect('homepage')
+                    else:
+                        #form = jobForm_step1_subjects()
+                        message = "Please correct the user names and try again"
+                        return render_to_response('CVapp/step1_subjects.html',{'form': form,'message': message},context_instance=RequestContext(request))
                 else:
                     form = jobForm_step1_subjects()
                     return render_to_response('CVapp/step1_subjects.html',{'form': form},context_instance=RequestContext(request))
@@ -223,6 +240,7 @@ def homepage(request):
                     currentJob.delete()    
                     return redirect('homepage') 
                 else:
+                    #tasks.FollowUserById() Delme!!!
                     crossUsersFollowData = CrossData.objects.filter(job=currentJob).exclude(followTime=None).order_by('followTime')                       
                     return render_to_response('CVapp/activeJob.html',{'isJobActive':currentJob.isJobActive ,'validationRatio':currentJob.validationRatio, 'P_validationThreshold':currentJob.P_validationThreshold, 'crossUsersFollowData': crossUsersFollowData},context_instance=RequestContext(request))       
             

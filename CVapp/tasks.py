@@ -79,7 +79,7 @@ def FollowUserById():
             if len(CrossData.objects.filter(job=job).exclude(followTime=None)) == 0:
                 job.validationRatio = 0
             else:
-                job.validationRatio = len(CrossData.objects.filter(job=job).exclude(followBackTime=None))/len(CrossData.objects.filter(job=job).exclude(followTime=None))
+                job.validationRatio = float(len(CrossData.objects.filter(job=job).exclude(followBackTime=None)))/float(len(CrossData.objects.filter(job=job).exclude(followTime=None)))
             job.save()
         else:
             # add Unfollowing algorithm
