@@ -1,10 +1,12 @@
 from django import forms
 from CVapp.models import Job, CrossData
-
+    
 class jobForm_step1_subjects(forms.ModelForm):
+    subject1Name = forms.CharField(label="First twitter username: ",widget=forms.TextInput(attrs={'placeholder':'enter first twitter username', 'id':'inputUsername1'}))
+    subject2Name = forms.CharField(label="Second twitter username: ",widget=forms.TextInput(attrs={'placeholder':'enter second twitter username', 'id':'inputUsername2'}))
+    
     class Meta:
         model = Job
-        fields = ('subject1Name','subject2Name')
         
 class jobForm_step2_crossType(forms.ModelForm):
     class Meta:

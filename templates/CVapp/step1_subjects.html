@@ -9,14 +9,24 @@
                 <div class="hero-content">
                     <div class="row-fluid">
                         <div class="span12 text-center">
-                            <p>STEP 1. Hi {{ user }}, Let's create a CrossValidate job!</p> 
-                            <p> {{ message }}</p>
+                            <p id="target">STEP 1. Hi {{ user }}, Let's create a CrossValidate job!</p>
                         </div>
                     </div>                        
                 </div>
             </div>	
         </header>		
-        <form id="pleaseWait" class="form-horizontal" action="" method="post">{% csrf_token %}
+       <!-- <form id="pleaseWait" class="form-horizontal" action="" method="post">{% csrf_token %} -->     
+        	<div class="row-fluid">
+        		<div class="span6 text-center">
+        			<input id="inputUsername1" name="subject1Name" placeholder="enter first twitter username" type="text" />
+        			<div id="outputUsername1"></div>
+        		</div>
+        		<div class="span6 text-center">
+        			<input id="inputUsername2" name="subject2Name" placeholder="enter second twitter username" type="text" />
+        			<div id="outputUsername2"></div>
+        		</div>  
+        	</div>
+      	<!-- 
         {% for field in form %}
             <div class="control-group field_container">
                 {{ field.errors }}
@@ -25,7 +35,7 @@
             </div>    
         {% endfor %}
         <input class="btn" type="submit" value="Submit" />
-        </form>                  
+        </form>       -->           
 		<section>
         
 		</section>					
