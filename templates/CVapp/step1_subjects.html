@@ -24,11 +24,15 @@
         				<p id="outputUsername1_name"></p>
         				<img id="outputUsername1_img">        				
 						<p>Following: <span id="outputUsername1_following"></span> | Followers: <span id="outputUsername1_followers"></span></p>
-						<div class="text-left">
+						<label class="radio text-left">
 							<input type="radio" name="outputUsername1_cross" value="both" checked> <span> Intersect Following and Followers</span> </br>
-							<input type="radio" name="outputUsername1_cross" value="followings"> <span> Intersect Following only</span></br>
+						</label>
+						<label class="radio text-left">
+							<input type="radio" name="outputUsername1_cross" value="following"> <span> Intersect Following only</span></br>
+						</label>  
+						<label class="radio text-left">
 							<input type="radio" name="outputUsername1_cross" value="followers"> <span> Intersect Followers only</span>
-						</div>  				
+						</label>  				
         			</div>
         		</div>
         		<div class="span3 offset3 text-center">
@@ -38,17 +42,22 @@
         				<p id="outputUsername2_name"></p>
         				<img id="outputUsername2_img">
         				<p>Following: <span id="outputUsername2_following"></span> | Followers: <span id="outputUsername2_followers"></span></p>
-						<div class="text-left">
+						<label class="radio text-left">
 							<input type="radio" name="outputUsername2_cross" value="both" checked> <span> Intersect Following and Followers</span> </br>
-							<input type="radio" name="outputUsername2_cross" value="followings"> <span> Intersect Following only</span></br>
+						</label>
+						<label class="radio text-left">
+							<input type="radio" name="outputUsername2_cross" value="following"> <span> Intersect Following only</span></br>
+						</label>  
+						<label class="radio text-left">
 							<input type="radio" name="outputUsername2_cross" value="followers"> <span> Intersect Followers only</span>
-						</div>      				        				
+						</label>  	     				        				
         			</div>
         		</div>  
         	</div>
         	<div class="row-fluid">
         		<div class="span6 offset3 text-center">
         			<img id="toStep2" height="50" width="50" src="{% static 'img/arrow-down.png' %}">
+        			<p id="toStep2_message"></p>
         		</div>
         	</div>
       	<!-- 

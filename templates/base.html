@@ -42,9 +42,6 @@
 	            <a class="brand"  href="{% url 'homepage' %}">CrossValidate</a>
 	            <div class="nav-collapse collapse" id="main-menu">
 	                <ul class="nav" id="main-menu-left">
-	                    {% if user.is_authenticated %}
-	                        <li><a id="swatch-link4" href="{% url 'homepage' %}">Hi {{ user }}, let's begin!</a></li>
-	                    {% endif %}
 	
 	                </ul>
 	
@@ -52,7 +49,7 @@
 	
 	                <ul class="nav pull-right" id="main-menu-right">
 	                    {% if user.is_authenticated %}
-	                    <li><a href="{% url 'account_logout' %}">Sign Out</a></li>
+	                    <li><a href="{% url 'account_logout' %}">Sign Out {{ user }}</a></li>
 	                    {% else %}
 	                    <li><a href="/accounts/twitter/login/">Sign In</a></li>
 	                    {% endif %}
