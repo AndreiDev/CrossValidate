@@ -14,7 +14,7 @@ body { padding-top: 40px; }
 	cursor: pointer;
 }
 
-#toStep2 {
+#toStep2, #toStep3, #recalculate {
 	cursor: pointer;
 }
 /* CUSTOMIZE THE BODY

@@ -21,8 +21,9 @@ $(document).ready(function () {
 	$('#outputUsername2_message').hide();
 	$('#outputUsername2').hide();	
 	$('#toStep2').hide();
+	$('#toStep2_loading').hide();
 	$('#toStep2_message').hide();
-	
+	$('#recalculate_message').hide();
 	$('#stage2').hide();	
 	
 	function getUser1Stats(data){
@@ -43,6 +44,7 @@ $(document).ready(function () {
 	    	if (sub2Done == true) {
 				$('#toStep2').show();
 				$('#toStep2_message').show();	
+				$('#toStep2_loading').hide();
 	    	}	    		    	
 	   	}
 	   	else if (data.message) {
@@ -51,14 +53,16 @@ $(document).ready(function () {
 	   		$('#outputUsername1_message').text(data.message);
 	   		sub1Done = false;
 			$('#toStep2').hide();
-			$('#toStep2_message').hide();	   		
+			$('#toStep2_message').hide();
+			$('#toStep2_loading').hide();	   		
 	   	}
 	    else{
 	    	$('#outputUsername1').hide();	
 	    	$('#outputUsername1_message').hide();
 			sub1Done = false;
 			$('#toStep2').hide();
-			$('#toStep2_message').hide();			
+			$('#toStep2_message').hide();		
+			$('#toStep2_loading').hide();	
 		}
 	}
 	
@@ -80,6 +84,7 @@ $(document).ready(function () {
 	    	if (sub1Done == true) {
 				$('#toStep2').show();
 				$('#toStep2_message').show();	
+				$('#toStep2_loading').hide();
 	    	}    	
 	   	}
 	   	else if (data.message) {
@@ -88,14 +93,16 @@ $(document).ready(function () {
 	   		$('#outputUsername2_message').text(data.message);
 	   		sub2Done = false;
 			$('#toStep2').hide();
-			$('#toStep2_message').hide();	   		
+			$('#toStep2_message').hide();	
+			$('#toStep2_loading').hide();   		
 	   	}
 	    else{
 	    	$('#outputUsername2').hide();	
 	    	$('#outputUsername2_message').hide();
 			sub2Done = false;
 			$('#toStep2').hide();
-			$('#toStep2_message').hide();			
+			$('#toStep2_message').hide();	
+			$('#toStep2_loading').hide();		
 		}	    	
 	}	
 	//$('#outputUsername1_cross').find(":selected").text()
@@ -129,9 +136,45 @@ $(document).ready(function () {
 		}
 	});	
 	
-	function getCrossData(data){
-		if (data.result){
-			alert('OK to stage 2');
+	$("input:radio[name=outputUsername1_cross]").click(function() {
+    	outputUsername1_cross = $(this).val();
+	});
+	
+	$("input:radio[name=outputUsername2_cross]").click(function() {
+    	outputUsername2_cross = $(this).val();
+	});		
+	
+	function openStage2(data){
+		if (data.result){			
+			$('#toStep2').hide();
+			$('#toStep2_loading').hide();
+			$('#toStep2_message').hide();	
+			$('#stage1_header').hide();
+			$('#stage2').show();	
+			$('#crossNum').text(data.crossNum);
+			$('#Following_Minimum').val(data.P_minFriends);
+			$('#Following_Maximum').val(data.P_maxFriends);
+			$('#Followers_Minimum').val(data.P_minFollowers);
+			$('#Followers_Maximum').val(data.P_maxFollowers);
+			$('#FF_Minimum').val(data.P_minFFratio);
+			$('#FF_Maximum').val(data.P_maxFFratio);
+			$('#minNoTweets').val(data.P_minNoTweets);
+			$('#maxDays').val(data.P_maxDays);
+			$('#validationDays').val(data.P_validationDays);
+			$('#validationThreshold').val(data.P_validationThreshold);
+	
+		}
+		else {
+			$('#inputUsername2').prop('disabled', false);
+			$('#inputUsername1').prop('disabled', false);
+			$('input[name=outputUsername1_cross]:radio').prop('disabled', false);
+			$('input[name=outputUsername2_cross]:radio').prop('disabled', false);
+			$('#subject1go').show();
+			$('#subject2go').show();				
+			$('#toStep2').show();
+			$('#toStep2_loading').hide();
+			$('#toStep2_message').text('Please try again in 15 minutes');
+			$('#toStep2_message').show();
 		}		   	
 	}		
 	
@@ -170,26 +213,65 @@ $(document).ready(function () {
 			$('#subject1go').hide();
 			$('#subject2go').hide();		
 			$('#toStep2_message').hide();
-			$('#toStep2').prop('disabled', true);
-			$('#toStep2').attr('src','static/img/loading.gif').attr('alt','loading...')
+			$('#toStep2').hide();
+			$('#toStep2_loading').show();
 			
-			Dajaxice.CVapp.AJgetCrossUsers(getCrossData,{'Username1_crossFollowing':Username1_crossFollowing,'Username1_crossFollowers':Username1_crossFollowers,'Username2_crossFollowing':Username2_crossFollowing,'Username2_crossFollowers':Username2_crossFollowers});			
+			Dajaxice.CVapp.AJgetCrossUsers(openStage2,{'Username1_crossFollowing':Username1_crossFollowing,'Username1_crossFollowers':Username1_crossFollowers,'Username2_crossFollowing':Username2_crossFollowing,'Username2_crossFollowers':Username2_crossFollowers});			
 
 		} 
 		else {
 			$('#toStep2').show();
+			$('#toStep2_loading').hide();
 			$('#toStep2_message').text('Number of fetches exceeded (' + NumOfFetches +')');
 			$('#toStep2_message').show();			
 		}
 	});		
+
+	function refreshCrossNum(data){
+		$('#crossNum').text(data.crossNum);
+		$('#recalculate_message').show();
+	}
 	
-	$("input:radio[name=outputUsername1_cross]").click(function() {
-    	outputUsername1_cross = $(this).val();
-	});
-	
-	$("input:radio[name=outputUsername2_cross]").click(function() {
-    	outputUsername2_cross = $(this).val();
-	});	
+	$('stage2 select').click(function(){
+		$('#recalculate_message').hide();	
+	})
+
+    $('#recalculate').click(function(){
+    	Dajaxice.CVapp.AJrecalculate(refreshCrossNum,{
+    	'Following_Minimum':$('#Following_Minimum').val(),
+    	'Following_Maximum':$('#Following_Maximum').val(),
+    	'Followers_Minimum':$('#Followers_Minimum').val(),
+    	'Followers_Maximum':$('#Followers_Maximum').val(),
+    	'FF_Minimum':$('#FF_Minimum').val(),
+    	'FF_Maximum':$('#FF_Maximum').val(),
+    	'minNoTweets':$('#minNoTweets').val(),
+    	'maxDays':$('#maxDays').val()}
+    	)
+    });
+    
+	function openStage3(data){
+		if (data.result){			
+			alert('Stage 3!!!');
+		}
+		else {
+
+		}		   	
+	}		    
+    
+    $('#toStep3').click(function(){
+    	Dajaxice.CVapp.AJselectUsers(openStage3,{
+    	'Following_Minimum':$('#Following_Minimum').val(),
+    	'Following_Maximum':$('#Following_Maximum').val(),
+    	'Followers_Minimum':$('#Followers_Minimum').val(),
+    	'Followers_Maximum':$('#Followers_Maximum').val(),
+    	'FF_Minimum':$('#FF_Minimum').val(),
+    	'FF_Maximum':$('#FF_Maximum').val(),
+    	'minNoTweets':$('#minNoTweets').val(),
+    	'maxDays':$('#maxDays').val(),
+    	'validationDays':$('#validationDays').val(),
+    	'validationThreshold':$('#validationThreshold').val()}
+    	)
+    });    
     
 	// media query event handler
 	if (matchMedia) {
