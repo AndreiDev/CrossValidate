@@ -10,10 +10,10 @@ $(document).ready(function () {
 	var sub2FollowersN = 0;
 	var outputUsername1_cross = "both";
 	var outputUsername2_cross = "both";
-	var outputUsername1_crossFollowing = 0;
-	var outputUsername1_crossFollowers = 0;	
-	var outputUsername2_crossFollowing = 0;
-	var outputUsername2_crossFollowers = 0;	
+	var Username1_crossFollowing = 0;
+	var Username1_crossFollowers = 0;	
+	var Username2_crossFollowing = 0;
+	var Username2_crossFollowers = 0;	
 	var NumOfFetches = 0
 
 	$('#outputUsername1_message').hide();
@@ -22,6 +22,8 @@ $(document).ready(function () {
 	$('#outputUsername2').hide();	
 	$('#toStep2').hide();
 	$('#toStep2_message').hide();
+	
+	$('#stage2').hide();	
 	
 	function getUser1Stats(data){
 		if (data.userFollowing){
@@ -127,51 +129,59 @@ $(document).ready(function () {
 		}
 	});	
 	
+	function getCrossData(data){
+		if (data.result){
+			alert('OK to stage 2');
+		}		   	
+	}		
+	
 	$('#toStep2').click(function(){	
 		
 		if (outputUsername1_cross=="both") {
-			outputUsername1_crossFollowing = 1;
-			outputUsername1_crossFollowers = 1;			
+			Username1_crossFollowing = 1;
+			Username1_crossFollowers = 1;			
 		}
 		else if (outputUsername1_cross=="following"){
-			outputUsername1_crossFollowing = 1;
-			outputUsername1_crossFollowers = 0;					
+			Username1_crossFollowing = 1;
+			Username1_crossFollowers = 0;					
 		}
 		else if (outputUsername1_cross=="followers"){
-			outputUsername1_crossFollowing = 0;
-			outputUsername1_crossFollowers = 1;					
+			Username1_crossFollowing = 0;
+			Username1_crossFollowers = 1;					
 		}	
 		if (outputUsername2_cross=="both") {
-			outputUsername2_crossFollowing = 1;
-			outputUsername2_crossFollowers = 1;			
+			Username2_crossFollowing = 1;
+			Username2_crossFollowers = 1;			
 		}
 		else if (outputUsername2_cross=="following"){
-			outputUsername2_crossFollowing = 1;
-			outputUsername2_crossFollowers = 0;					
+			Username2_crossFollowing = 1;
+			Username2_crossFollowers = 0;					
 		}
 		else if (outputUsername2_cross=="followers"){
-			outputUsername2_crossFollowing = 0;
-			outputUsername2_crossFollowers = 1;					
+			Username2_crossFollowing = 0;
+			Username2_crossFollowers = 1;					
 		}	
-		NumOfFetches = userFollowingN+userFollowersN+sub1FollowingN*outputUsername1_crossFollowing+sub1FollowersN*outputUsername1_crossFollowers+sub2FollowingN*outputUsername2_crossFollowing+sub2FollowersN*outputUsername2_crossFollowers;
+		NumOfFetches = userFollowingN+userFollowersN+sub1FollowingN*Username1_crossFollowing+sub1FollowersN*Username1_crossFollowers+sub2FollowingN*Username2_crossFollowing+sub2FollowersN*Username2_crossFollowers;
 		if (NumOfFetches <= 15) {
 			$('#inputUsername2').prop('disabled', true);
 			$('#inputUsername1').prop('disabled', true);
 			$('input[name=outputUsername1_cross]:radio').prop('disabled', true);
 			$('input[name=outputUsername2_cross]:radio').prop('disabled', true);
 			$('#subject1go').hide();
-			$('#subject2go').hide();
-			$('#toStep2').hide();			
+			$('#subject2go').hide();		
 			$('#toStep2_message').hide();
+			$('#toStep2').prop('disabled', true);
+			$('#toStep2').attr('src','static/img/loading.gif').attr('alt','loading...')
 			
-			
+			Dajaxice.CVapp.AJgetCrossUsers(getCrossData,{'Username1_crossFollowing':Username1_crossFollowing,'Username1_crossFollowers':Username1_crossFollowers,'Username2_crossFollowing':Username2_crossFollowing,'Username2_crossFollowers':Username2_crossFollowers});			
+
 		} 
 		else {
 			$('#toStep2').show();
 			$('#toStep2_message').text('Number of fetches exceeded (' + NumOfFetches +')');
 			$('#toStep2_message').show();			
 		}
-	});	
+	});		
 	
 	$("input:radio[name=outputUsername1_cross]").click(function() {
     	outputUsername1_cross = $(this).val();

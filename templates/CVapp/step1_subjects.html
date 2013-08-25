@@ -15,7 +15,8 @@
                 </div>
             </div>	
         </header>		
-       <!-- <form id="pleaseWait" class="form-horizontal" action="" method="post">{% csrf_token %} -->     
+       <!-- <form id="pleaseWait" class="form-horizontal" action="" method="post">{% csrf_token %} -->
+       	<div id="stage1">     
         	<div class="row-fluid">
         		<div class="span3 offset2 text-center">
         			<input id="inputUsername1" name="subject1Name" placeholder="enter twitter username" type="text" /><img id="subject1go" height="35" width="35" src="{% static 'img/arrow-right.png' %}">
@@ -60,6 +61,10 @@
         			<p id="toStep2_message"></p>
         		</div>
         	</div>
+       </div>
+       <div id="stage2">
+       		<p>STAGE 2</p>	
+       </div>
       	<!-- 
         {% for field in form %}
             <div class="control-group field_container">

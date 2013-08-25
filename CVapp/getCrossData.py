@@ -25,7 +25,7 @@ def twitterGetFollowersIds(twitter,**params):
     return twitter.get_followers_ids(**params)
 
 @twitter_retry
-def twitterGetFriendsIds(twitter,**params):
+def twitterGetFollowingIds(twitter,**params):
     return twitter.get_friends_ids(**params)    
     
 @twitter_retry
@@ -51,20 +51,20 @@ def getFollowersIds(twitter,subjectScreenName):
         followersIds_ids = followersIds_ids + followersIds_raw['ids']    
     return followersIds_ids
     
-def getFriendsIds(twitter,subjectScreenName):
-    print '*** getting the friends of ' + subjectScreenName
+def getFollowingIds(twitter,subjectScreenName):
+    print '*** getting the following of ' + subjectScreenName
     ii = 1
     print 'page ' + str(ii) 
-    friendsIds_raw = twitterGetFriendsIds(twitter,screen_name=subjectScreenName,cursor=-1,count=5000)
-    friendsIds_next_cursor = friendsIds_raw['next_cursor']
-    friendsIds_ids = friendsIds_raw['ids']
-    while friendsIds_next_cursor:
+    followingIds_raw = twitterGetFollowingIds(twitter,screen_name=subjectScreenName,cursor=-1,count=5000)
+    followingIds_next_cursor = followingIds_raw['next_cursor']
+    followingIds_ids = followingIds_raw['ids']
+    while followingIds_next_cursor:
         ii += 1
         print 'page ' + str(ii)     
-        friendsIds_raw = twitterGetFriendsIds(twitter,screen_name=subjectScreenName,cursor=friendsIds_next_cursor,count=5000)
-        friendsIds_next_cursor = friendsIds_raw['next_cursor']
-        friendsIds_ids = friendsIds_ids + friendsIds_raw['ids']    
-    return friendsIds_ids    
+        followingIds_raw = twitterGetFollowingIds(twitter,screen_name=subjectScreenName,cursor=followingIds_next_cursor,count=5000)
+        followingIds_next_cursor = followingIds_raw['next_cursor']
+        followingIds_ids = followingIds_ids + followingIds_raw['ids']    
+    return followingIds_ids    
 
 def followUser(twitter, subjectName):
     print '*** following ' + subjectName
