@@ -149,7 +149,7 @@ $(document).ready(function () {
 			$('#toStep2').hide();
 			$('#toStep2_loading').hide();
 			$('#toStep2_message').hide();	
-			$('#stage1_header').hide();
+			$('#stage1').hide();
 			$('#stage2').show();	
 			$('#crossNum').text(data.crossNum);
 			$('#Following_Minimum').val(data.P_minFriends);
@@ -165,12 +165,12 @@ $(document).ready(function () {
 	
 		}
 		else {
-			$('#inputUsername2').prop('disabled', false);
-			$('#inputUsername1').prop('disabled', false);
-			$('input[name=outputUsername1_cross]:radio').prop('disabled', false);
-			$('input[name=outputUsername2_cross]:radio').prop('disabled', false);
-			$('#subject1go').show();
-			$('#subject2go').show();				
+			//$('#inputUsername2').prop('disabled', false);
+			//$('#inputUsername1').prop('disabled', false);
+			//$('input[name=outputUsername1_cross]:radio').prop('disabled', false);
+			//$('input[name=outputUsername2_cross]:radio').prop('disabled', false);
+			//$('#subject1go').show();
+			//$('#subject2go').show();				
 			$('#toStep2').show();
 			$('#toStep2_loading').hide();
 			$('#toStep2_message').text('Please try again in 15 minutes');
@@ -211,7 +211,8 @@ $(document).ready(function () {
 			$('input[name=outputUsername1_cross]:radio').prop('disabled', true);
 			$('input[name=outputUsername2_cross]:radio').prop('disabled', true);
 			$('#subject1go').hide();
-			$('#subject2go').hide();		
+			$('#subject2go').hide();	
+			$('#step1').hide();	
 			$('#toStep2_message').hide();
 			$('#toStep2').hide();
 			$('#toStep2_loading').show();
@@ -232,7 +233,7 @@ $(document).ready(function () {
 		$('#recalculate_message').show();
 	}
 	
-	$('stage2 select').click(function(){
+	$('#stage2 option,#stage2 select').click(function(){
 		$('#recalculate_message').hide();	
 	})
 

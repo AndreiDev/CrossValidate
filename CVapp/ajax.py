@@ -8,6 +8,7 @@ from allauth.socialaccount.models import SocialLogin, SocialToken, SocialApp, So
 from twython import Twython, TwythonError, TwythonRateLimitError
 import getCrossData
 import time
+import ast
 
 @dajaxice_register()
 def AJuserStats(request, username, field):
@@ -142,8 +143,8 @@ def AJgetCrossUsers(request,Username1_crossFollowing,Username1_crossFollowers,Us
                 curJob.crossUsersProgress = curJob.crossUsersProgress + '*'
                 curJob.save()                                
                 rawData = getCrossData.twitterLookupUser(twitter,user_id=', '.join([str(e) for e in followersIds_id_groups[jj]]),include_entities='false')
-                rawData_has_keys = [aJob for aJob in rawData if set(MY_KEYS).issubset(aJob.keys())]
-                rawData_relevant = [{your_key: aJob[your_key] for your_key in MY_KEYS} for aJob in rawData_has_keys]
+                rawData_has_keys = [aCrossUser for aCrossUser in rawData if set(MY_KEYS).issubset(aCrossUser.keys())]
+                rawData_relevant = [{your_key: aCrossUser[your_key] for your_key in MY_KEYS} for aCrossUser in rawData_has_keys]
                 chosenUsers = chosenUsers + rawData_relevant   
         else:
             chosenUsers = '0'                    
@@ -152,22 +153,22 @@ def AJgetCrossUsers(request,Username1_crossFollowing,Username1_crossFollowers,Us
         curJob.save()   
                 
         rawData_relevant = chosenUsers
-        rawData_filtered = [aJob for aJob in rawData_relevant if (int(aJob['followers_count'])>int(curJob.P_minFollowers) and 
-              int(aJob['followers_count'])<int(curJob.P_maxFollowers) and 
-              int(aJob['friends_count'])>int(curJob.P_minFriends) and 
-              int(aJob['friends_count'])<int(curJob.P_maxFriends) and                                                                          
-              (float(aJob['followers_count'])/float(aJob['friends_count']))>float(curJob.P_minFFratio) and 
-              (float(aJob['followers_count'])/float(aJob['friends_count']))<float(curJob.P_maxFFratio) and 
-              int(aJob['statuses_count'])>int(curJob.P_minNoTweets) and 
-              (time.time() - time.mktime(time.strptime(aJob['status']['created_at'],'%a %b %d %H:%M:%S +0000 %Y')))/60.0/60.0/24.0 < int(curJob.P_maxDays) \
+        rawData_filtered = [aCrossUser for aCrossUser in rawData_relevant if (int(aCrossUser['followers_count'])>int(curJob.P_minFollowers) and 
+              int(aCrossUser['followers_count'])<int(curJob.P_maxFollowers) and 
+              int(aCrossUser['friends_count'])>int(curJob.P_minFriends) and 
+              int(aCrossUser['friends_count'])<int(curJob.P_maxFriends) and                                                                          
+              (float(aCrossUser['followers_count'])/float(aCrossUser['friends_count']))>float(curJob.P_minFFratio) and 
+              (float(aCrossUser['followers_count'])/float(aCrossUser['friends_count']))<float(curJob.P_maxFFratio) and 
+              int(aCrossUser['statuses_count'])>int(curJob.P_minNoTweets) and 
+              (time.time() - time.mktime(time.strptime(aCrossUser['status']['created_at'],'%a %b %d %H:%M:%S +0000 %Y')))/60.0/60.0/24.0 < int(curJob.P_maxDays) \
               )]                             
         
         return simplejson.dumps({'result':1,'crossNum': len(rawData_filtered),
                                  'P_minFollowers':"{:,}".format(curJob.P_minFollowers),'P_maxFollowers':"{:,}".format(curJob.P_maxFollowers),
                                  'P_minFriends':"{:,}".format(curJob.P_minFriends),'P_maxFriends':"{:,}".format(curJob.P_maxFriends),
-                                 'P_minFFratio':"{:,}".format(curJob.P_minFFratio),'P_maxFFratio':"{:,}".format(curJob.P_maxFFratio),
+                                 'P_minFFratio':curJob.P_minFFratio,'P_maxFFratio':curJob.P_maxFFratio,
                                  'P_minNoTweets':"{:,}".format(curJob.P_minNoTweets),'P_maxDays':"{:,}".format(curJob.P_maxDays),
-                                 'P_validationDays':"{:,}".format(curJob.P_validationDays),'P_validationThreshold':"{:,}".format(curJob.P_validationThreshold)})
+                                 'P_validationDays':"{:,}".format(curJob.P_validationDays),'P_validationThreshold':curJob.P_validationThreshold})
     except:
         return simplejson.dumps({'result':0})
     
@@ -186,14 +187,14 @@ def AJrecalculate(request,Following_Minimum,Following_Maximum,Followers_Minimum,
     curJob.save()
 
     rawData_relevant = ast.literal_eval(curJob.crossUsersRelevantData)
-    rawData_filtered = [aJob for aJob in rawData_relevant if (int(aJob['followers_count'])>int(curJob.P_minFollowers) and 
-          int(aJob['followers_count'])<int(curJob.P_maxFollowers) and 
-          int(aJob['friends_count'])>int(curJob.P_minFriends) and 
-          int(aJob['friends_count'])<int(curJob.P_maxFriends) and                                                                          
-          (float(aJob['followers_count'])/float(aJob['friends_count']))>float(curJob.P_minFFratio) and 
-          (float(aJob['followers_count'])/float(aJob['friends_count']))<float(curJob.P_maxFFratio) and 
-          int(aJob['statuses_count'])>int(curJob.P_minNoTweets) and 
-          (time.time() - time.mktime(time.strptime(aJob['status']['created_at'],'%a %b %d %H:%M:%S +0000 %Y')))/60.0/60.0/24.0 < int(curJob.P_maxDays) \
+    rawData_filtered = [aCrossUser for aCrossUser in rawData_relevant if (int(aCrossUser['followers_count'])>int(curJob.P_minFollowers) and 
+          int(aCrossUser['followers_count'])<int(curJob.P_maxFollowers) and 
+          int(aCrossUser['friends_count'])>int(curJob.P_minFriends) and 
+          int(aCrossUser['friends_count'])<int(curJob.P_maxFriends) and                                                                          
+          (float(aCrossUser['followers_count'])/float(aCrossUser['friends_count']))>float(curJob.P_minFFratio) and 
+          (float(aCrossUser['followers_count'])/float(aCrossUser['friends_count']))<float(curJob.P_maxFFratio) and 
+          int(aCrossUser['statuses_count'])>int(curJob.P_minNoTweets) and 
+          (time.time() - time.mktime(time.strptime(aCrossUser['status']['created_at'],'%a %b %d %H:%M:%S +0000 %Y')))/60.0/60.0/24.0 < int(curJob.P_maxDays) \
           )]                            
     
     return simplejson.dumps({'result':1,'crossNum': len(rawData_filtered)})
@@ -215,15 +216,15 @@ def AJselectUsers(request,Following_Minimum,Following_Maximum,Followers_Minimum,
     curJob.P_validationThreshold = validationThreshold  
     curJob.save()
 
-    rawData_relevant = curJob.crossUsersRelevantData
-    rawData_filtered = [aJob for aJob in rawData_relevant if (int(aJob['followers_count'])>int(curJob.P_minFollowers) and 
-          int(aJob['followers_count'])<int(curJob.P_maxFollowers) and 
-          int(aJob['friends_count'])>int(curJob.P_minFriends) and 
-          int(aJob['friends_count'])<int(curJob.P_maxFriends) and                                                                          
-          (float(aJob['followers_count'])/float(aJob['friends_count']))>float(curJob.P_minFFratio) and 
-          (float(aJob['followers_count'])/float(aJob['friends_count']))<float(curJob.P_maxFFratio) and 
-          int(aJob['statuses_count'])>int(curJob.P_minNoTweets) and 
-          (time.time() - time.mktime(time.strptime(aJob['status']['created_at'],'%a %b %d %H:%M:%S +0000 %Y')))/60.0/60.0/24.0 < int(curJob.P_maxDays) \
+    rawData_relevant = ast.literal_eval(curJob.crossUsersRelevantData)
+    rawData_filtered = [aCrossUser for aCrossUser in rawData_relevant if (int(aCrossUser['followers_count'])>int(curJob.P_minFollowers) and 
+          int(aCrossUser['followers_count'])<int(curJob.P_maxFollowers) and 
+          int(aCrossUser['friends_count'])>int(curJob.P_minFriends) and 
+          int(aCrossUser['friends_count'])<int(curJob.P_maxFriends) and                                                                          
+          (float(aCrossUser['followers_count'])/float(aCrossUser['friends_count']))>float(curJob.P_minFFratio) and 
+          (float(aCrossUser['followers_count'])/float(aCrossUser['friends_count']))<float(curJob.P_maxFFratio) and 
+          int(aCrossUser['statuses_count'])>int(curJob.P_minNoTweets) and 
+          (time.time() - time.mktime(time.strptime(aCrossUser['status']['created_at'],'%a %b %d %H:%M:%S +0000 %Y')))/60.0/60.0/24.0 < int(curJob.P_maxDays) \
           )]  
     
     for crossUser in rawData_filtered:

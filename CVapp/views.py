@@ -97,12 +97,12 @@ def homepage(request):
                     FFdata = {}
                     FFdata['subject1Name'] = currentJob.subject1Name
                     FFdata['subject2Name'] = currentJob.subject2Name
-                    FFdata['userNoFollowers'] = currentJob.userNoFollowers
-                    FFdata['userNoFriends'] = currentJob.userNoFriends
-                    FFdata['subject1NoFollowers'] = currentJob.subject1NoFollowers
-                    FFdata['subject1NoFriends'] = currentJob.subject1NoFriends
-                    FFdata['subject2NoFollowers'] = currentJob.subject2NoFollowers
-                    FFdata['subject2NoFriends'] = currentJob.subject2NoFriends 
+                    FFdata['userNoFollowing'] = currentJob.userNoFollowing
+                    FFdata['userNoFollowers'] = currentJob.userNoFollowers                    
+                    FFdata['subject1NoFollowing'] = currentJob.subject1NoFollowing
+                    FFdata['subject1NoFollowers'] = currentJob.subject1NoFollowers 
+                    FFdata['subject2NoFollowing'] = currentJob.subject2NoFollowing                   
+                    FFdata['subject2NoFollowers'] = currentJob.subject2NoFollowers                     
                     return render_to_response('CVapp/step2_crossType.html',{'form': form,'FFdata': FFdata},context_instance=RequestContext(request))  
             # LOADING DATA FOR PAGE 3
             elif not currentJob.crossUsersRelevantData and currentJob.jobStep == 3:

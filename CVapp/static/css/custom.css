@@ -17,6 +17,11 @@ body { padding-top: 40px; }
 #toStep2, #toStep3, #recalculate {
 	cursor: pointer;
 }
+
+#filter_params {
+	border:2px solid;
+	border-radius:25px;
+}
 /* CUSTOMIZE THE BODY
 -------------------------------------------------- 
 body {
