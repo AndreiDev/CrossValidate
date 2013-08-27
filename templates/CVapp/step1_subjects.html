@@ -15,11 +15,10 @@
                 </div>
             </div>	
         </header>		
-       <!-- <form id="pleaseWait" class="form-horizontal" action="" method="post">{% csrf_token %} -->
        	     
         	<div class="row-fluid">
         		<div class="span3 offset2 text-center">
-        			<input id="inputUsername1" name="subject1Name" placeholder="enter twitter username" type="text" /><img id="subject1go" height="35" width="35" src="{% static 'img/arrow-right.png' %}">
+        			<input id="inputUsername1" name="subject1Name" placeholder="a twitter username" type="text" /><img id="subject1go" height="35" width="35" src="{% static 'img/arrow-right.png' %}">
         			<p id="outputUsername1_message"></p>
         			<div id="outputUsername1">        				
         				<p id="outputUsername1_name"></p>
@@ -37,7 +36,7 @@
         			</div>
         		</div>
         		<div class="span3 offset3 text-center">
-        			<input id="inputUsername2" name="subject2Name" placeholder="enter twitter username" type="text" /><img id="subject2go" height="35" width="35" src="{% static 'img/arrow-right.png' %}">
+        			<input id="inputUsername2" name="subject2Name" placeholder="another twitter username" type="text" /><img id="subject2go" height="35" width="35" src="{% static 'img/arrow-right.png' %}">
         			<p id="outputUsername2_message"></p>
         			<div id="outputUsername2">        				
         				<p id="outputUsername2_name"></p>
@@ -68,8 +67,7 @@
             <div class="hero-unit">
                 <div class="hero-content">
                     <div class="row-fluid">
-                        <div class="span12 text-center">
-                        	<p><em></em><span id="crossNum"></span></em> Cross tweeters found</p>
+                        <div class="span12 text-center">                        	
                             <p id="target_stage2">Now is the time to set the Validation parameters</p>
                         </div>
                     </div>                        
@@ -78,9 +76,10 @@
         </header>	 
         
         <div id="filter_params">
-        	<div class="row-fluid">
+        	<div class="row-fluid text-center">
+        		<h2>Filtering parameters</h2>
         		<div class="span10 offset1 text-center">
-        			<h2>Filtering parameters</h2>
+					<h4><strong><span id="crossNum"></span></strong> Cross tweeters found</h4>        							
 			        <table class="table">
 				        <tr>
 				            <th><p></p></th>
@@ -191,12 +190,6 @@
 					</select>
 				</div>				
 			</div>		
-			<div class="row-fluid">	
-				<div class="span8 offset2 text-center">
-					<img id="recalculate" height="50" width="50" src="{% static 'img/recalculate.png' %}">
-					<p id="recalculate_message">Done</p>
-				</div>
-			</div>
 		</div>	
 		<div class="row-fluid">
 			<div class="span10 offset1 text-center">
@@ -235,17 +228,7 @@
 					<img id="toStep3" height="50" width="50" src="{% static 'img/arrow-down.png' %}">
 				</div>
 			</div>
-       </div>
-      	<!-- 
-        {% for field in form %}
-            <div class="control-group field_container">
-                {{ field.errors }}
-                <label class="control-label"> {{ field.label_tag }} </label>
-                <div class="controls"> {{ field }} </div>
-            </div>    
-        {% endfor %}
-        <input class="btn" type="submit" value="Submit" />
-        </form>       -->           
+       </div>         
 		<section>
         
 		</section>					

@@ -43,7 +43,7 @@ def FollowUserById():
                               
             twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)            
 
-            jobFriendsIds = getCrossData.getFriendsIds(twitter,job.userName) 
+            jobFriendsIds = getCrossData.getFollowingIds(twitter,job.userName) 
             jobFollowersIds = getCrossData.getFollowersIds(twitter,job.userName)                                        
             
             # update with new Friends and Followers 

@@ -3,6 +3,10 @@
     list-style-type: none;
 }
 
+#user2, #outputUsername1_message, #outputUsername1, #outputUsername2_message, #outputUsername2, #toStep2, #toStep2_loading, #toStep2_message, #stage2 {
+	display: none;
+}	
+
 body { padding-top: 40px; }
 @media screen and (max-width: 768px) {
     body { padding-top: 0px; }
@@ -14,7 +18,7 @@ body { padding-top: 40px; }
 	cursor: pointer;
 }
 
-#toStep2, #toStep3, #recalculate {
+#toStep2, #toStep3 {
 	cursor: pointer;
 }
 

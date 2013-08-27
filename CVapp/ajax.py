@@ -62,9 +62,9 @@ def AJuserStats(request, username, field):
         exec 'curJob.'+field+'NoFollowing = -1'        
         curJob.save()
         if updatedUserProfile:
-            return simplejson.dumps({'message':'no such user name','userFollowing':authUserProfile[3],'userFollowers':authUserProfile[4]})
+            return simplejson.dumps({'message':"username doesn't exist or blocked",'userFollowing':authUserProfile[3],'userFollowers':authUserProfile[4]})
         else:          
-            return simplejson.dumps({'message':'no such user name'})
+            return simplejson.dumps({'message':"username doesn't exist or blocked"})
 
 MY_KEYS = ['id_str','name','status','statuses_count','screen_name','description','profile_image_url','follow_request_sent','followers_count','friends_count','verified']
 
@@ -147,11 +147,12 @@ def AJgetCrossUsers(request,Username1_crossFollowing,Username1_crossFollowers,Us
                 rawData_relevant = [{your_key: aCrossUser[your_key] for your_key in MY_KEYS} for aCrossUser in rawData_has_keys]
                 chosenUsers = chosenUsers + rawData_relevant   
         else:
-            chosenUsers = '0'                    
+            chosenUsers = '0'         
+            return simplejson.dumps({'result':2})           
         
         curJob.crossUsersRelevantData = chosenUsers
         curJob.save()   
-                
+
         rawData_relevant = chosenUsers
         rawData_filtered = [aCrossUser for aCrossUser in rawData_relevant if (int(aCrossUser['followers_count'])>int(curJob.P_minFollowers) and 
               int(aCrossUser['followers_count'])<int(curJob.P_maxFollowers) and 
@@ -232,6 +233,9 @@ def AJselectUsers(request,Following_Minimum,Following_Maximum,Followers_Minimum,
                                 description = crossUser['description'], imageLink = crossUser['profile_image_url'], 
                                 statusesCount = crossUser['statuses_count'], followersCount = crossUser['followers_count'], 
                                 friendsCount = crossUser['friends_count'], toFollow = True)
-        newCrossUser.save()  
+        newCrossUser.save() 
+         
+    curJob.jobStep = 2
+    curJob.save()
         
     return simplejson.dumps({'result':1})

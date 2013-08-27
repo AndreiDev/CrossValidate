@@ -16,17 +16,24 @@ $(document).ready(function () {
 	var Username2_crossFollowers = 0;	
 	var NumOfFetches = 0
 
-	$('#outputUsername1_message').hide();
-	$('#outputUsername1').hide();	
-	$('#outputUsername2_message').hide();
-	$('#outputUsername2').hide();	
-	$('#toStep2').hide();
-	$('#toStep2_loading').hide();
-	$('#toStep2_message').hide();
-	$('#recalculate_message').hide();
-	$('#stage2').hide();	
+	$('#outputUsername1_message').hide("slow");
+	$('#outputUsername1').hide("slow");	
+	$('#outputUsername2_message').hide("slow");
+	$('#outputUsername2').hide("slow");	
+	$('#toStep2').hide("slow");
+	$('#toStep2_loading').hide("slow");
+	$('#toStep2_message').hide("slow");
+	$('#stage2').hide("slow");	
 	
 	function getUser1Stats(data){
+		   		
+   		$('#inputUsername1').prop('disabled', false);
+		$('#inputUsername2').prop('disabled', false);
+		$('input[name=outputUsername1_cross]:radio').prop('disabled', false);
+		$('input[name=outputUsername2_cross]:radio').prop('disabled', false);		
+		$('#subject1go').show();
+		$('#subject2go').show();		
+		
 		if (data.userFollowing){
 			userFollowingN = Math.ceil(data.userFollowing / 5000);
 			userFollowersN = Math.ceil(data.userFollowers / 5000);
@@ -36,37 +43,68 @@ $(document).ready(function () {
 			$('#outputUsername1_img').attr('src',data.pic)
 			$('#outputUsername1_following').text(data.following)
 			$('#outputUsername1_followers').text(data.followers)
-			$('#outputUsername1').show();	
-			$('#outputUsername1_message').hide();	    	
+			$('#outputUsername1').show("slow");	
+			$('#outputUsername1_message').hide("slow");	    	
 	    	sub1FollowingN = Math.ceil(data.following / 5000);
 	    	sub1FollowersN = Math.ceil(data.followers / 5000);	    
 	    	sub1Done = true;
 	    	if (sub2Done == true) {
-				$('#toStep2').show();
-				$('#toStep2_message').show();	
-				$('#toStep2_loading').hide();
+				$('#toStep2').show("slow");
+				$('#toStep2_message').hide("slow");
+				$('#toStep2_loading').hide("slow");
 	    	}	    		    	
 	   	}
 	   	else if (data.message) {
-	   		$('#outputUsername1').hide();	
-	   		$('#outputUsername1_message').show();
+	   		$('#outputUsername1').hide("slow");	
+	   		$('#outputUsername1_message').show("slow");
 	   		$('#outputUsername1_message').text(data.message);
 	   		sub1Done = false;
-			$('#toStep2').hide();
-			$('#toStep2_message').hide();
-			$('#toStep2_loading').hide();	   		
+			$('#toStep2').hide("slow");
+			$('#toStep2_message').hide("slow");
+			$('#toStep2_loading').hide("slow");	   		
 	   	}
 	    else{
-	    	$('#outputUsername1').hide();	
-	    	$('#outputUsername1_message').hide();
+	    	$('#outputUsername1').hide("slow");	
+	    	$('#outputUsername1_message').hide("slow");
 			sub1Done = false;
-			$('#toStep2').hide();
-			$('#toStep2_message').hide();		
-			$('#toStep2_loading').hide();	
+			$('#toStep2').hide("slow");
+			$('#toStep2_message').hide("slow");		
+			$('#toStep2_loading').hide("slow");	
 		}
 	}
 	
+	$('#subject1go').click(function(){
+		if ($('#inputUsername1').val()=="" || (alphaNumeric.test($('#inputUsername1').val()) && $('#inputUsername1').val().length < 15)) {
+	   		$('#outputUsername1').hide("slow");	
+	   		$('#outputUsername1_message').show("slow");
+	   			   		
+	   		$('#inputUsername1').prop('disabled', true);
+			$('#inputUsername2').prop('disabled', true);
+			$('input[name=outputUsername1_cross]:radio').prop('disabled', true);
+			$('input[name=outputUsername2_cross]:radio').prop('disabled', true);
+			$('#subject1go').hide();
+			$('#subject2go').hide();	   		
+	   		
+	   		$('#outputUsername1_message').text('loading...');
+	  		Dajaxice.CVapp.AJuserStats(getUser1Stats,{'username':$('#inputUsername1').val(),'field':'subject1'});			
+		}
+		else {
+	   		$('#outputUsername1').hide("slow");	
+	   		$('#outputUsername1_message').show("slow");
+	   		$('#outputUsername1_message').text('Please enter an alphanumeric username up to 15 characters');
+	   		sub1Done = false;
+		}
+	});
+	
 	function getUser2Stats(data){
+		
+   		$('#inputUsername1').prop('disabled', false);
+		$('#inputUsername2').prop('disabled', false);
+		$('input[name=outputUsername1_cross]:radio').prop('disabled', false);
+		$('input[name=outputUsername2_cross]:radio').prop('disabled', false);	
+		$('#subject1go').show();
+		$('#subject2go').show();
+				
 		if (data.userFollowing){
 			userFollowingN = Math.ceil(data.userFollowing / 5000);
 			userFollowersN = Math.ceil(data.userFollowers / 5000);
@@ -76,61 +114,54 @@ $(document).ready(function () {
 			$('#outputUsername2_img').attr('src',data.pic)
 			$('#outputUsername2_following').text(data.following)
 			$('#outputUsername2_followers').text(data.followers)
-			$('#outputUsername2').show();	
-			$('#outputUsername2_message').hide();	    	
+			$('#outputUsername2').show("slow");	
+			$('#outputUsername2_message').hide("slow");	    	
 	    	sub2FollowingN = Math.ceil(data.following / 5000);
 	    	sub2FollowersN = Math.ceil(data.followers / 5000);	    
 	    	sub2Done = true;
 	    	if (sub1Done == true) {
-				$('#toStep2').show();
-				$('#toStep2_message').show();	
-				$('#toStep2_loading').hide();
+				$('#toStep2').show("slow");
+				$('#toStep2_message').hide("slow");
+				$('#toStep2_loading').hide("slow");
 	    	}    	
 	   	}
 	   	else if (data.message) {
-	   		$('#outputUsername2').hide();	
-	   		$('#outputUsername2_message').show();
+	   		$('#outputUsername2').hide("slow");	
+	   		$('#outputUsername2_message').show("slow");
 	   		$('#outputUsername2_message').text(data.message);
 	   		sub2Done = false;
-			$('#toStep2').hide();
-			$('#toStep2_message').hide();	
-			$('#toStep2_loading').hide();   		
+			$('#toStep2').hide("slow");
+			$('#toStep2_message').hide("slow");	
+			$('#toStep2_loading').hide("slow");   		
 	   	}
 	    else{
-	    	$('#outputUsername2').hide();	
-	    	$('#outputUsername2_message').hide();
+	    	$('#outputUsername2').hide("slow");	
+	    	$('#outputUsername2_message').hide("slow");
 			sub2Done = false;
-			$('#toStep2').hide();
-			$('#toStep2_message').hide();	
-			$('#toStep2_loading').hide();		
+			$('#toStep2').hide("slow");
+			$('#toStep2_message').hide("slow");	
+			$('#toStep2_loading').hide("slow");		
 		}	    	
 	}	
-	//$('#outputUsername1_cross').find(":selected").text()
-	$('#subject1go').click(function(){
-		if ($('#inputUsername1').val()=="" || (alphaNumeric.test($('#inputUsername1').val()) && $('#inputUsername1').val().length < 15)) {
-	   		$('#outputUsername1').hide();	
-	   		$('#outputUsername1_message').show();
-	   		$('#outputUsername1_message').text('loading...');
-	  		Dajaxice.CVapp.AJuserStats(getUser1Stats,{'username':$('#inputUsername1').val(),'field':'subject1'});			
-		}
-		else {
-	   		$('#outputUsername1').hide();	
-	   		$('#outputUsername1_message').show();
-	   		$('#outputUsername1_message').text('Please enter an alphanumeric username up to 15 characters');
-	   		sub1Done = false;
-		}
-	});
 	
 	$('#subject2go').click(function(){		
 		if ($('#inputUsername2').val()=="" || (alphaNumeric.test($('#inputUsername2').val()) && $('#inputUsername2').val().length < 15)) {
-	   		$('#outputUsername2').hide();	
-	   		$('#outputUsername2_message').show();
+	   		$('#outputUsername2').hide("slow");	
+	   		
+	   		$('#inputUsername1').prop('disabled', true);
+			$('#inputUsername2').prop('disabled', true);
+			$('input[name=outputUsername1_cross]:radio').prop('disabled', true);
+			$('input[name=outputUsername2_cross]:radio').prop('disabled', true);
+			$('#subject1go').hide();
+			$('#subject2go').hide();			
+			
+	   		$('#outputUsername2_message').show("slow");
 	   		$('#outputUsername2_message').text('loading...');
 	  		Dajaxice.CVapp.AJuserStats(getUser2Stats,{'username':$('#inputUsername2').val(),'field':'subject2'});			
 		}
 		else {
-	   		$('#outputUsername2').hide();	
-	   		$('#outputUsername2_message').show();
+	   		$('#outputUsername2').hide("slow");	
+	   		$('#outputUsername2_message').show("slow");
 	   		$('#outputUsername2_message').text('Please enter an alphanumeric username up to 15 characters');
 	   		sub2Done = false;
 		}
@@ -145,12 +176,12 @@ $(document).ready(function () {
 	});		
 	
 	function openStage2(data){
-		if (data.result){			
-			$('#toStep2').hide();
-			$('#toStep2_loading').hide();
-			$('#toStep2_message').hide();	
-			$('#stage1').hide();
-			$('#stage2').show();	
+		if (data.result == 1){			
+			$('#toStep2').hide("slow");
+			$('#toStep2_loading').hide("slow");
+			$('#toStep2_message').hide("slow");	
+			$('#stage1').hide("slow");
+			$('#stage2').show("slow");	
 			$('#crossNum').text(data.crossNum);
 			$('#Following_Minimum').val(data.P_minFriends);
 			$('#Following_Maximum').val(data.P_maxFriends);
@@ -164,18 +195,24 @@ $(document).ready(function () {
 			$('#validationThreshold').val(data.P_validationThreshold);
 	
 		}
-		else {
-			//$('#inputUsername2').prop('disabled', false);
-			//$('#inputUsername1').prop('disabled', false);
-			//$('input[name=outputUsername1_cross]:radio').prop('disabled', false);
-			//$('input[name=outputUsername2_cross]:radio').prop('disabled', false);
-			//$('#subject1go').show();
-			//$('#subject2go').show();				
-			$('#toStep2').show();
-			$('#toStep2_loading').hide();
+		else if (data.result == 0){			
+			$('#toStep2').show("slow");
+			$('#toStep2_loading').hide("slow");
 			$('#toStep2_message').text('Please try again in 15 minutes');
-			$('#toStep2_message').show();
+			$('#toStep2_message').show("slow");
 		}		   	
+		else if (data.result == 2){
+			$('#inputUsername2').prop('disabled', false);
+			$('#inputUsername1').prop('disabled', false);
+			$('input[name=outputUsername1_cross]:radio').prop('disabled', false);
+			$('input[name=outputUsername2_cross]:radio').prop('disabled', false);
+			$('#subject1go').show("slow");
+			$('#subject2go').show("slow");				
+			$('#toStep2').show("slow");
+			$('#toStep2_loading').hide("slow");
+			$('#toStep2_message').text('No cross users found. Please redefine and try again in 15 minutes');
+			$('#toStep2_message').show("slow");			
+		}
 	}		
 	
 	$('#toStep2').click(function(){	
@@ -210,34 +247,29 @@ $(document).ready(function () {
 			$('#inputUsername1').prop('disabled', true);
 			$('input[name=outputUsername1_cross]:radio').prop('disabled', true);
 			$('input[name=outputUsername2_cross]:radio').prop('disabled', true);
-			$('#subject1go').hide();
-			$('#subject2go').hide();	
-			$('#step1').hide();	
-			$('#toStep2_message').hide();
-			$('#toStep2').hide();
-			$('#toStep2_loading').show();
+			$('#subject1go').hide("slow");
+			$('#subject2go').hide("slow");	
+			$('#step1').hide("slow");	
+			$('#toStep2_message').hide("slow");
+			$('#toStep2').hide("slow");
+			$('#toStep2_loading').show("slow");
 			
 			Dajaxice.CVapp.AJgetCrossUsers(openStage2,{'Username1_crossFollowing':Username1_crossFollowing,'Username1_crossFollowers':Username1_crossFollowers,'Username2_crossFollowing':Username2_crossFollowing,'Username2_crossFollowers':Username2_crossFollowers});			
 
 		} 
 		else {
-			$('#toStep2').show();
-			$('#toStep2_loading').hide();
+			$('#toStep2').show("slow");
+			$('#toStep2_loading').hide("slow");
 			$('#toStep2_message').text('Number of fetches exceeded (' + NumOfFetches +')');
-			$('#toStep2_message').show();			
+			$('#toStep2_message').show("slow");			
 		}
 	});		
 
 	function refreshCrossNum(data){
 		$('#crossNum').text(data.crossNum);
-		$('#recalculate_message').show();
 	}
 	
-	$('#stage2 option,#stage2 select').click(function(){
-		$('#recalculate_message').hide();	
-	})
-
-    $('#recalculate').click(function(){
+	$('#stage2 select').click(function(){
     	Dajaxice.CVapp.AJrecalculate(refreshCrossNum,{
     	'Following_Minimum':$('#Following_Minimum').val(),
     	'Following_Maximum':$('#Following_Maximum').val(),
@@ -247,12 +279,12 @@ $(document).ready(function () {
     	'FF_Maximum':$('#FF_Maximum').val(),
     	'minNoTweets':$('#minNoTweets').val(),
     	'maxDays':$('#maxDays').val()}
-    	)
-    });
+    	)		
+	})
     
 	function openStage3(data){
 		if (data.result){			
-			alert('Stage 3!!!');
+			location.reload();
 		}
 		else {
 
