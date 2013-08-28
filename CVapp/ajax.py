@@ -6,9 +6,30 @@ from getUserProfile import getUserProfile
 
 from allauth.socialaccount.models import SocialLogin, SocialToken, SocialApp, SocialAccount
 from twython import Twython, TwythonError, TwythonRateLimitError
-import getCrossData
+import useTwitterAPI
 import time
 import ast
+
+@dajaxice_register()
+def AJRateLimit(request, resources):
+    
+    SocialAccountId = SocialAccount.objects.filter(user_id=request.user.id)[0].id 
+    APP_KEY = SocialApp.objects.filter(name='AndreiiTest')[0].client_id 
+    APP_SECRET = SocialApp.objects.filter(name='AndreiiTest')[0].secret
+    OAUTH_TOKEN = SocialToken.objects.filter(account_id=SocialAccountId)[0].token
+    OAUTH_TOKEN_SECRET = SocialToken.objects.filter(account_id=SocialAccountId)[0].token_secret
+                      
+    twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
+    rateLimitString = useTwitterAPI.getRateLimit(twitter,resources)  
+    waitSeconds = 0
+    if int(rateLimitString['resources']['friends']['/friends/list']['remaining']) < int(rateLimitString['resources']['friends']['/friends/list']['limit']):
+        waitSeconds = int(rateLimitString['resources']['friends']['/friends/list']['reset'])-time.time()
+    if int(rateLimitString['resources']['followers']['/followers/list']['remaining']) < int(rateLimitString['resources']['followers']['/followers/list']['limit']):
+        waitSeconds = max(waitSeconds,int(rateLimitString['resources']['followers']['/followers/list']['reset'])-time.time())
+    if int(rateLimitString['resources']['users']['/users/lookup']['remaining']) < int(rateLimitString['resources']['users']['/users/lookup']['limit']):
+        waitSeconds = max(waitSeconds,int(rateLimitString['resources']['users']['/users/lookup']['reset'])-time.time())            
+    
+    return simplejson.dumps({'waitSeconds':waitSeconds})
 
 @dajaxice_register()
 def AJuserStats(request, username, field):
@@ -81,30 +102,30 @@ def AJgetCrossUsers(request,Username1_crossFollowing,Username1_crossFollowers,Us
                           
         twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
         
-        sub0FollowersIds = getCrossData.getFollowersIds(twitter,curJob.userName)
+        sub0FollowersIds = useTwitterAPI.getFollowersIds(twitter,curJob.userName)
         curJob.crossUsersProgress = curJob.crossUsersProgress + '*'
         curJob.save()
-        sub0FollowingIds = getCrossData.getFollowingIds(twitter,curJob.userName)
+        sub0FollowingIds = useTwitterAPI.getFollowingIds(twitter,curJob.userName)
         curJob.crossUsersProgress = curJob.crossUsersProgress + '*'
         curJob.save()    
         
         if Username1_crossFollowing:
-            sub1FollowingIds = getCrossData.getFollowingIds(twitter,curJob.subject1Name)
+            sub1FollowingIds = useTwitterAPI.getFollowingIds(twitter,curJob.subject1Name)
             curJob.crossUsersProgress = curJob.crossUsersProgress + '*'
             curJob.save()
             
         if Username1_crossFollowers:          
-            sub1FollowersIds = getCrossData.getFollowersIds(twitter,curJob.subject1Name)
+            sub1FollowersIds = useTwitterAPI.getFollowersIds(twitter,curJob.subject1Name)
             curJob.crossUsersProgress = curJob.crossUsersProgress + '*'
             curJob.save()                       
             
         if Username2_crossFollowing:
-            sub2FollowingIds = getCrossData.getFollowingIds(twitter,curJob.subject2Name)    
+            sub2FollowingIds = useTwitterAPI.getFollowingIds(twitter,curJob.subject2Name)    
             curJob.crossUsersProgress = curJob.crossUsersProgress + '*'
             curJob.save()      
         
         if Username2_crossFollowers:  
-            sub2FollowersIds = getCrossData.getFollowersIds(twitter,curJob.subject2Name)
+            sub2FollowersIds = useTwitterAPI.getFollowersIds(twitter,curJob.subject2Name)
             curJob.crossUsersProgress = curJob.crossUsersProgress + '*'
             curJob.save()                                                            
         
@@ -142,7 +163,7 @@ def AJgetCrossUsers(request,Username1_crossFollowing,Username1_crossFollowers,Us
                 print jj
                 curJob.crossUsersProgress = curJob.crossUsersProgress + '*'
                 curJob.save()                                
-                rawData = getCrossData.twitterLookupUser(twitter,user_id=', '.join([str(e) for e in followersIds_id_groups[jj]]),include_entities='false')
+                rawData = useTwitterAPI.twitterLookupUser(twitter,user_id=', '.join([str(e) for e in followersIds_id_groups[jj]]),include_entities='false')
                 rawData_has_keys = [aCrossUser for aCrossUser in rawData if set(MY_KEYS).issubset(aCrossUser.keys())]
                 rawData_relevant = [{your_key: aCrossUser[your_key] for your_key in MY_KEYS} for aCrossUser in rawData_has_keys]
                 chosenUsers = chosenUsers + rawData_relevant   

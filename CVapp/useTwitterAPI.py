@@ -36,6 +36,10 @@ def twitterLookupUser(twitter,**params):
 def twitterCreateFriendship(twitter,**params):
     return twitter.create_friendship(**params)
 
+@twitter_retry
+def twitterRateLimit(twitter,**params):
+    return twitter.get_application_rate_limit_status(**params)
+
 def getFollowersIds(twitter,subjectScreenName):
     print '*** getting the followers of ' + subjectScreenName
     ii = 1
@@ -68,6 +72,9 @@ def getFollowingIds(twitter,subjectScreenName):
 
 def followUser(twitter, subjectName):
     print '*** following ' + subjectName
-    return twitterCreateFriendship(twitter,screen_name=subjectName)
+    return twitterCreateFriendship(twitter,screen_name=subjectName)    
     
+def getRateLimit(twitter, resources):    
+    return twitterRateLimit(twitter,resources=resources)
     
+        

@@ -3,7 +3,7 @@
     list-style-type: none;
 }
 
-#user2, #outputUsername1_message, #outputUsername1, #outputUsername2_message, #outputUsername2, #toStep2, #toStep2_loading, #toStep2_message, #stage2 {
+#inputUsername1, #inputUsername2, #subject1go, #subject2go, #user2, #outputUsername1_message, #outputUsername1, #outputUsername2_message, #outputUsername2, #toStep2, #toStep2_loading, #toStep2_message, #stage2 {
 	display: none;
 }	
 

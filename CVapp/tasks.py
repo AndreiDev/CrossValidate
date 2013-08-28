@@ -1,7 +1,7 @@
 from models import Job, CrossData
 from celery import task
 import time
-import getCrossData
+import useTwitterAPI
 from allauth.socialaccount.models import SocialLogin, SocialToken, SocialApp, SocialAccount
 from twython import Twython, TwythonError, TwythonRateLimitError
 from django.contrib.auth.models import User
@@ -43,8 +43,8 @@ def FollowUserById():
                               
             twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)            
 
-            jobFriendsIds = getCrossData.getFollowingIds(twitter,job.userName) 
-            jobFollowersIds = getCrossData.getFollowersIds(twitter,job.userName)                                        
+            jobFriendsIds = useTwitterAPI.getFollowingIds(twitter,job.userName) 
+            jobFollowersIds = useTwitterAPI.getFollowersIds(twitter,job.userName)                                        
             
             # update with new Friends and Followers 
             for crossUser in CrossData.objects.filter(job=job).filter(followTime=None): 
@@ -64,7 +64,7 @@ def FollowUserById():
             else:
                 crossUserToFollow = crossUsersToFollow[0]
                 try:
-                    result = getCrossData.followUser(twitter,crossUserToFollow.screenName)
+                    result = useTwitterAPI.followUser(twitter,crossUserToFollow.screenName)
                 except:
                     result = None
                 crossUserToFollow.toFollow = False

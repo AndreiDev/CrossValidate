@@ -25,14 +25,60 @@ $(document).ready(function () {
 	$('#toStep2_message').hide("slow");
 	$('#stage2').hide("slow");	
 	
+	// Waiting for rate-limit reset
+	function checkRateLimits(data){		
+		if (data.waitSeconds > 0){
+	   		$('#inputUsername1').prop('disabled', true);
+			$('#inputUsername2').prop('disabled', true);	
+			$('#inputUsername1').hide("slow");
+			$('#inputUsername2').hide("slow");
+			$('#subject1go').hide("slow");
+			$('#subject2go').hide("slow");		
+			var timeToWait = data.waitSeconds;		
+			var waitInterval=setInterval(function(){
+				if (timeToWait < 1) {
+					clearInterval(waitInterval);
+					$('#target_stage1').text('Choose Cross Validation subjects and intersection type');
+			   		$('#inputUsername1').prop('disabled', false);
+					$('#inputUsername2').prop('disabled', false);	
+					$('#inputUsername1').show("slow");
+					$('#inputUsername2').show("slow");					
+					$('#subject1go').show("slow");
+					$('#subject2go').show("slow");													
+				}
+				else {
+					minutes = Math.floor(timeToWait / 60);
+					seconds = Math.floor(timeToWait % 60);			
+			    	if (minutes < 10) {minutes = "0"+minutes;}
+    				if (seconds < 10) {seconds = "0"+seconds;}	
+					$('#target_stage1').text('Please wait ' + minutes + ':' + seconds + ' to do another Cross-Validation');		
+					timeToWait = timeToWait - 1;
+				}		
+			},1000);					
+		}
+		else {			
+			$('#target_stage1').text('Choose Cross Validation subjects and intersection type');
+	   		$('#inputUsername1').prop('disabled', false);
+			$('#inputUsername2').prop('disabled', false);	
+			$('#inputUsername1').show("slow");
+			$('#inputUsername2').show("slow");				
+			$('#subject1go').show("slow");
+			$('#subject2go').show("slow");
+		}
+	}
+	
+	if ($('#stage1_header').is(":visible")) {
+		Dajaxice.CVapp.AJRateLimit(checkRateLimits,{'resources':['users', 'friends', 'followers']});
+	}
+	
 	function getUser1Stats(data){
 		   		
    		$('#inputUsername1').prop('disabled', false);
 		$('#inputUsername2').prop('disabled', false);
 		$('input[name=outputUsername1_cross]:radio').prop('disabled', false);
 		$('input[name=outputUsername2_cross]:radio').prop('disabled', false);		
-		$('#subject1go').show();
-		$('#subject2go').show();		
+		$('#subject1go').show("slow");
+		$('#subject2go').show("slow");		
 		
 		if (data.userFollowing){
 			userFollowingN = Math.ceil(data.userFollowing / 5000);
@@ -74,6 +120,7 @@ $(document).ready(function () {
 	}
 	
 	$('#subject1go').click(function(){
+		$('#toStep2').hide("slow");
 		if ($('#inputUsername1').val()=="" || (alphaNumeric.test($('#inputUsername1').val()) && $('#inputUsername1').val().length < 15)) {
 	   		$('#outputUsername1').hide("slow");	
 	   		$('#outputUsername1_message').show("slow");
@@ -144,7 +191,8 @@ $(document).ready(function () {
 		}	    	
 	}	
 	
-	$('#subject2go').click(function(){		
+	$('#subject2go').click(function(){	
+		$('#toStep2').hide("slow");	
 		if ($('#inputUsername2').val()=="" || (alphaNumeric.test($('#inputUsername2').val()) && $('#inputUsername2').val().length < 15)) {
 	   		$('#outputUsername2').hide("slow");	
 	   		

@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from models import Job, CrossData
 from getUserProfile import getUserProfile
-import getCrossData
+import useTwitterAPI
 from allauth.socialaccount.models import SocialLogin, SocialToken, SocialApp, SocialAccount
 from twython import Twython, TwythonError, TwythonRateLimitError
 import time
@@ -23,7 +23,13 @@ def homepage(request):
         if Jobs:
             currentJob = Jobs[0]
             
-            if currentJob.jobStep == 1:
+            if currentJob.jobStep == 1:                
+                toDeleteCrossDatas = CrossData.objects.filter(job=currentJob) 
+                for toDeleteCrossData in toDeleteCrossDatas:
+                    toDeleteCrossData.delete()  
+                currentJob.delete()    
+                newJob = Job(userName=request.user,jobStep=1)
+                newJob.save()              
                 return render_to_response('CVapp/step1_subjects.html',context_instance=RequestContext(request))
                   
             elif currentJob.jobStep == 2:
@@ -49,8 +55,10 @@ def homepage(request):
                     currentJob.delete()    
                     return redirect('homepage') 
                 else:
-                    crossUsersFollowData = CrossData.objects.filter(job=currentJob).exclude(followTime=None).order_by('followTime')                       
-                    return render_to_response('CVapp/activeJob.html',{'isJobActive':currentJob.isJobActive ,'validationRatio':int(currentJob.validationRatio*100), 'P_validationThreshold':int(currentJob.P_validationThreshold*100), 'crossUsersFollowData': crossUsersFollowData},context_instance=RequestContext(request))       
+                    crossUsersFollowData = CrossData.objects.filter(job=currentJob).exclude(followTime=None).order_by('followTime')   
+                    NFollowed = len(CrossData.objects.filter(job=currentJob).exclude(followTime=None))
+                    NFollow = len(CrossData.objects.filter(job=currentJob)) - NFollowed         
+                    return render_to_response('CVapp/activeJob.html',{'isJobActive':currentJob.isJobActive ,'NFollowed':NFollowed,'NFollow':NFollow,'validationRatio':int(currentJob.validationRatio*100), 'P_validationThreshold':int(currentJob.P_validationThreshold*100), 'crossUsersFollowData': crossUsersFollowData},context_instance=RequestContext(request))       
             
 
             else:
