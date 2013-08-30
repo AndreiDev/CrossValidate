@@ -12,7 +12,8 @@
         <title>CrossValidate | {% block title %}Homepage{% endblock%}</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        {% block head %} {% endblock %}
+        
+		<link rel="icon" type="image/png" href="{% static 'favicon.ico' %}">
 				    
 		<link href="{% static 'css/overcast/jquery-ui-1.10.2.custom.min.css' %}" rel="stylesheet">
 		<!-- Le styles -->
@@ -21,7 +22,7 @@
 		<link href="{% static 'css/custom.css' %}" rel="stylesheet">
 		<link href="{% static 'css/bootstrap-responsive.css' %}" rel="stylesheet">
 		<link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet">
-				
+		{% block head %} {% endblock %}		
 		<!--[if lt IE 9]>
 		  <script src="{% static 'js/html5shiv.js' %}"></script>
 		<![endif]-->		
@@ -39,7 +40,7 @@
 	                <span class="icon-bar"></span>
 	                <span class="icon-bar"></span>
 	            </a>
-	            <a class="brand"  href="{% url 'homepage' %}">CrossValidate</a>
+	            <a class="brand"><img height="35px" width="35px" src="{% static 'img/crossValidateLogoWhite_small.png' %}" />CrossValidate (Beta version)</a>
 	            <div class="nav-collapse collapse" id="main-menu">
 	                <ul class="nav" id="main-menu-left">
 	
@@ -51,7 +52,7 @@
 	                    {% if user.is_authenticated %}
 	                    <li><a href="{% url 'account_logout' %}">Sign Out {{ user }}</a></li>
 	                    {% else %}
-	                    <li><a href="/accounts/twitter/login/">Sign In</a></li>
+	                    <li><a href="/accounts/twitter/login/">Start a CrossValidate plan</a></li>
 	                    {% endif %}
 	                </ul>
 	            </div>
@@ -61,40 +62,58 @@
     
         <div id="body-container" class="container">
         
-    {% block body %}
     {% block content %}
     {% endblock content %}
-    {% endblock body %}
     
     {% block extra_body %}
     {% endblock extra_body %}
+
+
         
         </div> <!-- /container -->
         
-        		<!-- FOOTER -->
-		<!--<footer>
+    	<!-- FOOTER -->
+    		
+		<footer id="footer">
 			<div class="navbar navbar-fixed-bottom">
 			  <div class="navbar-inner">
-				<div class="container">	  		
+	
 					<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
 			  
-					<a class="brand" href="#contact" role="button" data-toggle="modal">Andrei Averkin 2013 &copy;</a>
+					
 					<div class="nav-collapse collapse">
 						<ul class="nav">
-							<li class="divider-vertical"></li>
-							<li><a href="#about" role="button" data-toggle="modal">About</a></li>	
-							<li class="divider-vertical"></li>	
-							<li><a href="#disclaimer" role="button" data-toggle="modal">Disclaimer</a></li>					
+							<li class="span4"><p></p>
+							<li class="span4"><a href="mailto:andrei@crossValidate.com?Subject=Hi%20Andrei" target="_top">Drop me an Email</a></li>	
+                            <li class="span4"><a href="#FAQ" role="button" data-toggle="modal">How CrossValidate works</a></li>	
+                            <li><a href="http://www.andreii.com" target="_blank" role="button" data-toggle="modal">Andrei Averkin 2013</a></li>	                            
 						</ul>
 					</div>
-				</div>
+
 			  </div>
 			</div>		
-		</footer>-->
+		</footer>
+		
+		<!-- MODALS -->
+		
+		<div id="FAQ" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="myModalLabel1">Some guidance and FAQ</h3>
+		  </div>
+		  <div class="modal-body">
+			<p>CrossValidate FAQ.</p>
+			<p>TBD - how it works. Some FAQs.
+			</p>
+		  </div>
+		  <div class="modal-footer">
+			<button class="btn" data-dismiss="modal">Close</button>
+		  </div>
+		</div>
         
         {% block extra_content %}{% endblock %}
         

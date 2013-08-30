@@ -3,53 +3,98 @@
     list-style-type: none;
 }
 
-body {
-	background-image: url('../img/bg.png')
-}
 
-.brand {
-	cursor: default;
-}
-
-#footer {
-	padding: 20px 0 20px 0;
-}
-
-#inputUsername1, #inputUsername2, #subject1go, #subject2go, #user2, #outputUsername1_message, #outputUsername1, #outputUsername2_message, #outputUsername2, #toStep2, #toStep2_loading, #toStep2_message, #stage2 {
-	display: none;
-}	
 
 body { padding-top: 40px; }
 @media screen and (max-width: 768px) {
     body { padding-top: 0px; }
 }
-
-#subject1go, #subject2go {
-	padding: -10px 0 0 0;
-	margin: -10px 0 0 0;
-	cursor: pointer;
+	
+body { 
+  background: url(../img/background.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  opacity: .8;
 }
 
-#toStep2, #toStep3 {
-	cursor: pointer;
+.hero-unit {
+  opacity: .75;
 }
 
-#filter_params {
-	border:2px solid;
-	border-radius:25px;
-}
+    /* MARKETING CONTENT
+    -------------------------------------------------- */
 
-/* CUSTOMIZE THE MODALS
--------------------------------------------------- */    
-.modal-body form {
-	margin: -15px;
-}
+    /* Center align the text within the three columns below the carousel */
+    .marketing .span4 {
+      text-align: center;
+      color:#eeeeee;
+      opacity: .9;
+    }
+    .marketing h2 {
+      font-weight: normal;
+      color:#ffffff;
+      opacity: .95;
+    }
+    .marketing .span4 p {
+      margin-left: 10px;
+      margin-right: 10px;
+    }
 
-#calories-modal span {
-	color: #0088CC;
-	font-weight: bold;
-}
+    /* Featurettes
+    ------------------------- */
 
+    .featurette-divider {
+      margin: 80px 0; /* Space out the Bootstrap <hr> more */
+    }
+    .featurette {
+      padding-top: 120px; /* Vertically center images part 1: add padding above and below text. */
+      overflow: hidden; /* Vertically center images part 2: clear their floats. */ 
+    }
+    .featurette-image {
+      margin-top: -120px; /* Vertically center images part 3: negative margin up the image the same amount of the padding to center it. */
+    }
+
+    /* Give some space on the sides of the floated elements so text doesn't run right into it. */
+    .featurette-image.pull-left {
+      margin-right: 40px;
+    }
+    .featurette-image.pull-right {
+      margin-left: 40px;
+    }
+    
+    /* Thin out the marketing headings */
+    .featurette-heading, h1 {
+      font-size: 50px;
+      font-weight: 300;
+      line-height: 1;
+      letter-spacing: -1px;
+      color:#ffffff;
+      opacity: .95;
+    }
+    
+    .featurette-heading .muted {
+      color:#ffffff;
+      opacity: .85;  
+    }
+    
+    .lead {
+      color:#ffffff;
+      opacity: .9;      	
+    }   
+    
+    .marketing p a{
+    	color:#ffffff;
+    	font-weight:bold; 
+    } 
+
+/*html, body {
+    background: url('.../img/background.jpg') no-repeat scroll 0 0 / 100% 100% transparent !important;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}*/
 /* CUSTOMIZE THE BODY
 -------------------------------------------------- 
 body {
