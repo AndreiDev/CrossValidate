@@ -22,10 +22,10 @@ def AJRateLimit(request, resources):
     twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
     rateLimitString = useTwitterAPI.getRateLimit(twitter,resources)  
     waitSeconds = 0
-    if int(rateLimitString['resources']['friends']['/friends/list']['remaining']) < int(rateLimitString['resources']['friends']['/friends/list']['limit']):
-        waitSeconds = int(rateLimitString['resources']['friends']['/friends/list']['reset'])-time.time()
-    if int(rateLimitString['resources']['followers']['/followers/list']['remaining']) < int(rateLimitString['resources']['followers']['/followers/list']['limit']):
-        waitSeconds = max(waitSeconds,int(rateLimitString['resources']['followers']['/followers/list']['reset'])-time.time())
+    if int(rateLimitString['resources']['friends']['/friends/ids']['remaining']) < int(rateLimitString['resources']['friends']['/friends/ids']['limit']):
+        waitSeconds = int(rateLimitString['resources']['friends']['/friends/ids']['reset'])-time.time()
+    if int(rateLimitString['resources']['followers']['/followers/ids']['remaining']) < int(rateLimitString['resources']['followers']['/followers/ids']['limit']):
+        waitSeconds = max(waitSeconds,int(rateLimitString['resources']['followers']['/followers/ids']['reset'])-time.time())
     if int(rateLimitString['resources']['users']['/users/lookup']['remaining']) < int(rateLimitString['resources']['users']['/users/lookup']['limit']):
         waitSeconds = max(waitSeconds,int(rateLimitString['resources']['users']['/users/lookup']['reset'])-time.time())            
     

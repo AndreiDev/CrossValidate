@@ -38,7 +38,7 @@ $(document).ready(function () {
 			var waitInterval=setInterval(function(){
 				if (timeToWait < 1) {
 					clearInterval(waitInterval);
-					$('#target_stage1').text('Choose Cross Validation subjects and intersection type');
+					$('#target_stage1').text('Choose key-players in your arena to intersect users that follow them and that they follow');
 			   		$('#inputUsername1').prop('disabled', false);
 					$('#inputUsername2').prop('disabled', false);	
 					$('#inputUsername1').show("slow");
@@ -51,13 +51,13 @@ $(document).ready(function () {
 					seconds = Math.floor(timeToWait % 60);			
 			    	if (minutes < 10) {minutes = "0"+minutes;}
     				if (seconds < 10) {seconds = "0"+seconds;}	
-					$('#target_stage1').text('Please wait ' + minutes + ':' + seconds + ' to do another Cross-Validation');		
+					$('#target_stage1').html('<p>Please wait ' + minutes + ':' + seconds + ' to create another CrossValidate plan <br/> <i>(twitter allows a 15 minutes window per user)</i></p>');		
 					timeToWait = timeToWait - 1;
 				}		
 			},1000);					
 		}
 		else {			
-			$('#target_stage1').text('Choose Cross Validation subjects and intersection type');
+			$('#target_stage1').text('Choose key-players in your arena to intersect users that follow them and that they follow');
 	   		$('#inputUsername1').prop('disabled', false);
 			$('#inputUsername2').prop('disabled', false);	
 			$('#inputUsername1').show("slow");
@@ -138,7 +138,7 @@ $(document).ready(function () {
 		else {
 	   		$('#outputUsername1').hide("slow");	
 	   		$('#outputUsername1_message').show("slow");
-	   		$('#outputUsername1_message').text('Please enter an alphanumeric username up to 15 characters');
+	   		$('#outputUsername1_message').text('Please enter an alphanumeric username, up to 15 characters');
 	   		sub1Done = false;
 		}
 	});
@@ -210,7 +210,7 @@ $(document).ready(function () {
 		else {
 	   		$('#outputUsername2').hide("slow");	
 	   		$('#outputUsername2_message').show("slow");
-	   		$('#outputUsername2_message').text('Please enter an alphanumeric username up to 15 characters');
+	   		$('#outputUsername2_message').text('Please enter an alphanumeric username, up to 15 characters');
 	   		sub2Done = false;
 		}
 	});	
@@ -250,16 +250,17 @@ $(document).ready(function () {
 			$('#toStep2_message').show("slow");
 		}		   	
 		else if (data.result == 2){
-			$('#inputUsername2').prop('disabled', false);
-			$('#inputUsername1').prop('disabled', false);
-			$('input[name=outputUsername1_cross]:radio').prop('disabled', false);
-			$('input[name=outputUsername2_cross]:radio').prop('disabled', false);
-			$('#subject1go').show("slow");
-			$('#subject2go').show("slow");				
-			$('#toStep2').show("slow");
+			$('#inputUsername2').prop('disabled', true);
+			$('#inputUsername1').prop('disabled', true);
+			$('input[name=outputUsername1_cross]:radio').prop('disabled', true);
+			$('input[name=outputUsername2_cross]:radio').prop('disabled', true);
+			$('#subject1go').hide("slow");
+			$('#subject2go').hide("slow");				
+			$('#toStep2').hide("slow");
 			$('#toStep2_loading').hide("slow");
-			$('#toStep2_message').text('No cross users found. Please redefine and try again in 15 minutes');
-			$('#toStep2_message').show("slow");			
+			$('#toStep2_message').html('<p>No users found in the intersection.<br/> Please choose users that are somehow related to one another, and try again in 15 minutes</p>');
+			$('#toStep2_message').show("slow");		
+			setTimeout(function(){window.location.reload();},5000)
 		}
 	}		
 	

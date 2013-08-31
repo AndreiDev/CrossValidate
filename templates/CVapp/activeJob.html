@@ -13,8 +13,9 @@
 		                    	<p>By now your validation ratio is {{ validationRatio }}%</p>
 		                    	<p>Remeber that your goal is to reach {{ P_validationThreshold }}%</p>
 		                    	<p>You have followed {{ NFollowed }} out of {{ NFollow }}</p>
+		                    	<p>Your CrossValidate plan will end at {{ endOfValidation }}</p>
 		                    {% else %}
-		                    	<p>This job is over</p> 
+		                    	<p>CrossValidate plan is over</p> 
 		                    	{% if validationRatio > P_validationThreshold %}
 		                    		<p>SUCCESS!!!</p>
 		                    	{% else %}

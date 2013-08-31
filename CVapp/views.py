@@ -12,6 +12,7 @@ import useTwitterAPI
 from allauth.socialaccount.models import SocialLogin, SocialToken, SocialApp, SocialAccount
 from twython import Twython, TwythonError, TwythonRateLimitError
 import time
+from datetime import timedelta
 import ast
 import tasks #delme!!!
 
@@ -57,8 +58,9 @@ def homepage(request):
                 else:
                     crossUsersFollowData = CrossData.objects.filter(job=currentJob).exclude(followTime=None).order_by('followTime')   
                     NFollowed = len(CrossData.objects.filter(job=currentJob).exclude(followTime=None))
-                    NFollow = len(CrossData.objects.filter(job=currentJob)) - NFollowed         
-                    return render_to_response('CVapp/activeJob.html',{'isJobActive':currentJob.isJobActive ,'NFollowed':NFollowed,'NFollow':NFollow,'validationRatio':int(currentJob.validationRatio*100), 'P_validationThreshold':int(currentJob.P_validationThreshold*100), 'crossUsersFollowData': crossUsersFollowData},context_instance=RequestContext(request))       
+                    NFollow = len(CrossData.objects.filter(job=currentJob)) - NFollowed    
+                    endOfValidation = str(currentJob.jobDateTime+timedelta(days=int(currentJob.P_validationDays)))[:19]
+                    return render_to_response('CVapp/activeJob.html',{'isJobActive':currentJob.isJobActive ,'NFollowed':NFollowed,'NFollow':NFollow,'validationRatio':int(currentJob.validationRatio*100), 'P_validationThreshold':int(currentJob.P_validationThreshold*100),'endOfValidation':endOfValidation, 'crossUsersFollowData': crossUsersFollowData},context_instance=RequestContext(request))       
             
 
             else:
