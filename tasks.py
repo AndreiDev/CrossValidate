@@ -1,14 +1,18 @@
-from models import Job, CrossData
-from celery import task
+from django.core.management import setup_environ
+import CrossValidate.settings
+setup_environ(CrossValidate.settings)
+
+from CVapp.models import Job, CrossData
+#from celery import task
 import time
-import useTwitterAPI
+import CVapp.useTwitterAPI
 from allauth.socialaccount.models import SocialLogin, SocialToken, SocialApp, SocialAccount
 from twython import Twython, TwythonError, TwythonRateLimitError
 from django.contrib.auth.models import User
 import datetime
 from django.utils.timezone import utc
 
-@task()
+#@task()
 def FollowUserById():
     MAX_DAYS_TO_DELETE_JOB = 90
     jobs = Job.objects.all()
@@ -43,8 +47,8 @@ def FollowUserById():
                               
             twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)            
 
-            jobFriendsIds = useTwitterAPI.getFollowingIds(twitter,job.userName) 
-            jobFollowersIds = useTwitterAPI.getFollowersIds(twitter,job.userName)                                        
+            jobFriendsIds = CVapp.useTwitterAPI.getFollowingIds(twitter,job.userName) 
+            jobFollowersIds = CVapp.useTwitterAPI.getFollowersIds(twitter,job.userName)                                        
             
             # update with new Friends and Followers 
             for crossUser in CrossData.objects.filter(job=job).filter(followTime=None): 
@@ -64,7 +68,7 @@ def FollowUserById():
             else:
                 crossUserToFollow = crossUsersToFollow[0]
                 try:
-                    result = useTwitterAPI.followUser(twitter,crossUserToFollow.screenName)
+                    result = CVapp.useTwitterAPI.followUser(twitter,crossUserToFollow.screenName)
                 except:
                     result = None
                 crossUserToFollow.toFollow = False
@@ -83,4 +87,7 @@ def FollowUserById():
             job.save()
         else:
             # add Unfollowing algorithm
-            continue    		
+            continue   
+
+if __name__=='__main__':
+    FollowUserById()			
