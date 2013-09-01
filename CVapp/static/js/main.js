@@ -121,7 +121,7 @@ $(document).ready(function () {
 	
 	$('#subject1go').click(function(){
 		$('#toStep2').hide("slow");
-		if ($('#inputUsername1').val()=="" || (alphaNumeric.test($('#inputUsername1').val()) && $('#inputUsername1').val().length < 15)) {
+		if ($('#inputUsername1').val()=="" || (alphaNumeric.test($('#inputUsername1').val()) && $('#inputUsername1').val().length <= 15)) {
 	   		$('#outputUsername1').hide("slow");	
 	   		$('#outputUsername1_message').show("slow");
 	   			   		
@@ -193,7 +193,7 @@ $(document).ready(function () {
 	
 	$('#subject2go').click(function(){	
 		$('#toStep2').hide("slow");	
-		if ($('#inputUsername2').val()=="" || (alphaNumeric.test($('#inputUsername2').val()) && $('#inputUsername2').val().length < 15)) {
+		if ($('#inputUsername2').val()=="" || (alphaNumeric.test($('#inputUsername2').val()) && $('#inputUsername2').val().length <= 15)) {
 	   		$('#outputUsername2').hide("slow");	
 	   		
 	   		$('#inputUsername1').prop('disabled', true);
