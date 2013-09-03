@@ -1,1 +1,1 @@
-cd /home/smoketes/django/CrossValidate && /home/smoketes/python/bin/python tasks.py
+cd /home/andreii1/django_projects/CrossValidate && /home/andreii1/python/bin/python tasks.py
