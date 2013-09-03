@@ -95,8 +95,8 @@ def AJgetCrossUsers(request,Username1_crossFollowing,Username1_crossFollowers,Us
         curJob = Job.objects.filter(userName=request.user)[0]
         
         SocialAccountId = SocialAccount.objects.filter(user_id=request.user.id)[0].id 
-        APP_KEY = SocialApp.objects.filter(name='AndreiiTest')[0].client_id 
-        APP_SECRET = SocialApp.objects.filter(name='AndreiiTest')[0].secret
+        APP_KEY = SocialApp.objects.filter(name='SmokeTestApp.com')[0].client_id 
+        APP_SECRET = SocialApp.objects.filter(name='SmokeTestApp.com')[0].secret
         OAUTH_TOKEN = SocialToken.objects.filter(account_id=SocialAccountId)[0].token
         OAUTH_TOKEN_SECRET = SocialToken.objects.filter(account_id=SocialAccountId)[0].token_secret
                           
