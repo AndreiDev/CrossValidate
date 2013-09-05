@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
-{% block title %} Welcome ! {% endblock %}
+{% block title %} Validate your idea {% endblock %}
 {% block head %}
 	<link href="{% static 'css/homepage.css' %}" rel="stylesheet">
 {% endblock %}
@@ -11,10 +11,13 @@
             <div class="hero-unit">
                 <div class="hero-content">
                     <div class="row-fluid">
-                        <div class="span12 text-center">
+                        <div class="span10 offset1 text-center">
                         	<h2>Rapid validation of start-up ideas in target markets (AKA smoke testing)</h2>
                             <p>Please read through to get the gist of how MVPtest works<br /> When you are ready click below to start your MVPtest</p> 
                         </div>
+						<div class="span1 text-center">
+							<a href="https://www.twitter.com/MVPtestapp" class="soc-icon" target="_blank"><i class="icon icon-twitter"></i><span></span></a>
+						</div>                        
                     </div>
                     <div class="row-fluid">
                         <div class="span12 text-center">                    
@@ -137,7 +140,10 @@
 			<h2>Changes to this Policy</h2>
 			<p>This Privacy Policy may be updated from time to time for any reason; each version will apply to information collected while it was in place. We will notify you of any material changes to our Privacy Policy by posting the new Privacy Policy on our Site. You are advised to consult this Privacy Policy regularly for any changes.</p>
 			<p>This Privacy Policy is effective as of September 06, 2013.</p>
-		  </div>			      
+		  </div>
+		  <div class="modal-footer">
+			<button class="btn" data-dismiss="modal">Close</button>
+		  </div>
 		</div>	  
 		<div id="terms" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel_terms" aria-hidden="true">
 		  <div class="modal-header">
@@ -185,8 +191,9 @@
 			<p>All content included on the Site, such as text, graphics, logos, button icons, images, audio clips, digital downloads, data compilations, and software, is the property of MVPtest or its content suppliers and protected by international copyright laws. The compilation of all content on the Site is the exclusive property of MVPtest and protected by international copyright laws. All software used on (or provided through) the Site is the property of MVPtest or its software suppliers and protected by international copyright laws.</p>
 			<h2>14. Indemnification</h2>
 			<p>You agree to indemnify and hold harmless MVPtest, its contractors, and its licensors, and their respective directors, officers, employees and agents from and against any and all claims and expenses, including attorneys' fees, arising out of your use of the Website, including but not limited to out of your violation this Agreement.</p>
-
-
-		  </div>			      
+		  </div>			
+		  <div class="modal-footer">
+			<button class="btn" data-dismiss="modal">Close</button>
+		  </div>		  			      
 		</div>			
 {% endblock %}

@@ -138,14 +138,14 @@ def AJgetCrossUsers(request,Username1_crossFollowing,Username1_crossFollowers,Us
             if Username2_crossFollowers:
                 ids_list = list(set(ids_list).intersection(set(sub2FollowersIds)))
     
-            elif Username1_crossFollowers:
-                ids_list = sub1FollowersIds
-                if Username1_crossFollowing:
-                    ids_list = list(set(ids_list).intersection(set(sub1FollowingIds)))
-                if Username2_crossFollowing:
-                    ids_list = list(set(ids_list).intersection(set(sub2FollowingIds)))
-                if Username2_crossFollowers:
-                    ids_list = list(set(ids_list).intersection(set(sub2FollowersIds)))           
+        elif Username1_crossFollowers:
+            ids_list = sub1FollowersIds
+            if Username1_crossFollowing:
+                ids_list = list(set(ids_list).intersection(set(sub1FollowingIds)))
+            if Username2_crossFollowing:
+                ids_list = list(set(ids_list).intersection(set(sub2FollowingIds)))
+            if Username2_crossFollowers:
+                ids_list = list(set(ids_list).intersection(set(sub2FollowersIds)))           
                                             
         ids_list = list(set(ids_list).difference(set(sub0FollowingIds)).difference(set(sub0FollowersIds)))
         

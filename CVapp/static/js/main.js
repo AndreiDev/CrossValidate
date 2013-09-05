@@ -304,7 +304,7 @@ $(document).ready(function () {
 			$('#subject1go').hide("slow");
 			$('#subject2go').hide("slow");	
 			$('#step1').hide("slow");	
-			$('#toStep2_message').text('0%');
+			$('#toStep2_message').text('Calculating intersection: 0%');
 			$('#toStep2_message').show("slow");
 			$('#toStep2').hide("slow");
 			$('#toStep2_loading').show("slow");
