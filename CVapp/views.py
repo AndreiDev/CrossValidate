@@ -18,6 +18,9 @@ import tasks #delme!!!
 
 MY_KEYS = ['id_str','name','status','statuses_count','screen_name','description','profile_image_url','follow_request_sent','followers_count','friends_count','verified']
 
+def privacy(request):
+    return render_to_response('privacy.html')
+
 def homepage(request):
     if request.user.is_authenticated():
         Jobs = Job.objects.filter(userName=request.user)

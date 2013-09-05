@@ -38,7 +38,7 @@ $(document).ready(function () {
 			var waitInterval=setInterval(function(){
 				if (timeToWait < 1) {
 					clearInterval(waitInterval);
-					$('#target_stage1').text('Choose key-players in your arena to intersect users that follow them and that they follow');
+					$('#target_stage1').text('Choose opinion-leaders in your arena to intersect tweeters that follow them and that they follow');
 			   		$('#inputUsername1').prop('disabled', false);
 					$('#inputUsername2').prop('disabled', false);	
 					$('#inputUsername1').show("slow");
@@ -51,13 +51,13 @@ $(document).ready(function () {
 					seconds = Math.floor(timeToWait % 60);			
 			    	if (minutes < 10) {minutes = "0"+minutes;}
     				if (seconds < 10) {seconds = "0"+seconds;}	
-					$('#target_stage1').html('<p>Please wait ' + minutes + ':' + seconds + ' to create another CrossValidate plan <br/> <i>(twitter allows a 15 minutes window per user)</i></p>');		
+					$('#target_stage1').html('<p>Please wait ' + minutes + ':' + seconds + ' to create another MVPtest <br/> <i>(twitter allows a 15 minutes window per user)</i></p>');		
 					timeToWait = timeToWait - 1;
 				}		
 			},1000);					
 		}
 		else {			
-			$('#target_stage1').text('Choose key-players in your arena to intersect users that follow them and that they follow');
+			$('#target_stage1').text('Choose opinion-leaders in your arena to intersect tweeters that follow them and that they follow');
 	   		$('#inputUsername1').prop('disabled', false);
 			$('#inputUsername2').prop('disabled', false);	
 			$('#inputUsername1').show("slow");
@@ -224,6 +224,7 @@ $(document).ready(function () {
 	});		
 	
 	function openStage2(data){
+		clearInterval(progressInterval);	
 		if (data.result == 1){			
 			$('#toStep2').hide("slow");
 			$('#toStep2_loading').hide("slow");
@@ -258,11 +259,15 @@ $(document).ready(function () {
 			$('#subject2go').hide("slow");				
 			$('#toStep2').hide("slow");
 			$('#toStep2_loading').hide("slow");
-			$('#toStep2_message').html('<p>No users found in the intersection.<br/> Please choose users that are somehow related to one another, and try again in 15 minutes</p>');
+			$('#toStep2_message').html('<p>No users found in the intersection.<br/> Please choose opinion-leaders that are somehow related to one another, and try again in 15 minutes</p>');
 			$('#toStep2_message').show("slow");		
 			setTimeout(function(){window.location.reload();},5000)
 		}
 	}		
+	
+	function openStage2_progress(data){	
+		$('#toStep2_message').text('Calculating intersection: ' + data.progress + '%');
+	}
 	
 	$('#toStep2').click(function(){	
 		
@@ -299,12 +304,18 @@ $(document).ready(function () {
 			$('#subject1go').hide("slow");
 			$('#subject2go').hide("slow");	
 			$('#step1').hide("slow");	
-			$('#toStep2_message').hide("slow");
+			$('#toStep2_message').text('0%');
+			$('#toStep2_message').show("slow");
 			$('#toStep2').hide("slow");
 			$('#toStep2_loading').show("slow");
 			
-			Dajaxice.CVapp.AJgetCrossUsers(openStage2,{'Username1_crossFollowing':Username1_crossFollowing,'Username1_crossFollowers':Username1_crossFollowers,'Username2_crossFollowing':Username2_crossFollowing,'Username2_crossFollowers':Username2_crossFollowers});			
+			Dajaxice.CVapp.AJgetCrossUsers(openStage2,{'Username1_crossFollowing':Username1_crossFollowing,'Username1_crossFollowers':Username1_crossFollowers,'Username2_crossFollowing':Username2_crossFollowing,'Username2_crossFollowers':Username2_crossFollowers});		
 
+			progressInterval=setInterval(function(){
+					Dajaxice.CVapp.AJgetCrossUsers_progress(openStage2_progress);					
+			},3000);				
+						
+			
 		} 
 		else {
 			$('#toStep2').show("slow");
@@ -316,10 +327,15 @@ $(document).ready(function () {
 
 	function refreshCrossNum(data){
 		$('#crossNum').text(data.crossNum);
+		$("#filter_params").css("cursor", "default"); 
+    	$("#filter_params select").prop('disabled', false);
+    	$('#toStep2').show("slow");
 	};
 	
 	function reCalculate(){
-    	$("body").css("cursor", "progress");		
+    	$("#filter_params").css("cursor", "progress");
+    	$("#filter_params select").prop('disabled', true);
+    	$('#toStep2').hide("slow");
     	Dajaxice.CVapp.AJrecalculate(refreshCrossNum,{
     	'Following_Minimum':$('#Following_Minimum').val(),
     	'Following_Maximum':$('#Following_Maximum').val(),
@@ -330,7 +346,6 @@ $(document).ready(function () {
     	'minNoTweets':$('#minNoTweets').val(),
     	'maxDays':$('#maxDays').val()}    	   	
     	);
-    	$("body").css("cursor", "default"); 
     };		
 	
 	$('#stage2 select').change(function(){
@@ -347,19 +362,33 @@ $(document).ready(function () {
 	}		    
     
     $('#toStep3').click(function(){
-    	Dajaxice.CVapp.AJselectUsers(openStage3,{
-    	'Following_Minimum':$('#Following_Minimum').val(),
-    	'Following_Maximum':$('#Following_Maximum').val(),
-    	'Followers_Minimum':$('#Followers_Minimum').val(),
-    	'Followers_Maximum':$('#Followers_Maximum').val(),
-    	'FF_Minimum':$('#FF_Minimum').val(),
-    	'FF_Maximum':$('#FF_Maximum').val(),
-    	'minNoTweets':$('#minNoTweets').val(),
-    	'maxDays':$('#maxDays').val(),
-    	'validationDays':$('#validationDays').val(),
-    	'validationThreshold':$('#validationThreshold').val()}
-    	)
+    	if ($('#crossNum').text() == 0) {
+    		alert('It seems like your intersection group is empty. Try to soften the filters.')
+    	}
+    	else {    	
+    		$('body').hide("slow");
+	    	Dajaxice.CVapp.AJselectUsers(openStage3,{
+	    	'Following_Minimum':$('#Following_Minimum').val(),
+	    	'Following_Maximum':$('#Following_Maximum').val(),
+	    	'Followers_Minimum':$('#Followers_Minimum').val(),
+	    	'Followers_Maximum':$('#Followers_Maximum').val(),
+	    	'FF_Minimum':$('#FF_Minimum').val(),
+	    	'FF_Maximum':$('#FF_Maximum').val(),
+	    	'minNoTweets':$('#minNoTweets').val(),
+	    	'maxDays':$('#maxDays').val(),
+	    	'validationDays':$('#validationDays').val(),
+	    	'validationThreshold':$('#validationThreshold').val()}
+	    	)
+	    }
     });    
+    
+    function cancelForm(data){
+    	location.reload();
+    };
+    
+    $('#cancel').click(function(){
+    	Dajaxice.CVapp.AJcancel(cancelForm);    	
+    });
     
 	// media query event handler
 	if (matchMedia) {

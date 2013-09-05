@@ -20,7 +20,11 @@ body {
 }
 
 .hero-unit {
-  opacity: .75;
+  opacity: .75;  
+}
+
+#buttom-links a, #buttom-links a:hover  {
+	color:#ffffff;
 }
 
     /* MARKETING CONTENT

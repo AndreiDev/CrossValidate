@@ -103,30 +103,30 @@ def AJgetCrossUsers(request,Username1_crossFollowing,Username1_crossFollowers,Us
         twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
         
         sub0FollowersIds = useTwitterAPI.getFollowersIds(twitter,curJob.userName)
-        curJob.crossUsersProgress = curJob.crossUsersProgress + '*'
+        curJob.crossUsersProgress = 10
         curJob.save()
         sub0FollowingIds = useTwitterAPI.getFollowingIds(twitter,curJob.userName)
-        curJob.crossUsersProgress = curJob.crossUsersProgress + '*'
+        curJob.crossUsersProgress = 20
         curJob.save()    
         
         if Username1_crossFollowing:
             sub1FollowingIds = useTwitterAPI.getFollowingIds(twitter,curJob.subject1Name)
-            curJob.crossUsersProgress = curJob.crossUsersProgress + '*'
+            curJob.crossUsersProgress = 25
             curJob.save()
             
         if Username1_crossFollowers:          
             sub1FollowersIds = useTwitterAPI.getFollowersIds(twitter,curJob.subject1Name)
-            curJob.crossUsersProgress = curJob.crossUsersProgress + '*'
+            curJob.crossUsersProgress = 30
             curJob.save()                       
             
         if Username2_crossFollowing:
             sub2FollowingIds = useTwitterAPI.getFollowingIds(twitter,curJob.subject2Name)    
-            curJob.crossUsersProgress = curJob.crossUsersProgress + '*'
+            curJob.crossUsersProgress = 35
             curJob.save()      
         
         if Username2_crossFollowers:  
             sub2FollowersIds = useTwitterAPI.getFollowersIds(twitter,curJob.subject2Name)
-            curJob.crossUsersProgress = curJob.crossUsersProgress + '*'
+            curJob.crossUsersProgress = 40
             curJob.save()                                                            
         
         if Username1_crossFollowing:
@@ -138,14 +138,14 @@ def AJgetCrossUsers(request,Username1_crossFollowing,Username1_crossFollowers,Us
             if Username2_crossFollowers:
                 ids_list = list(set(ids_list).intersection(set(sub2FollowersIds)))
     
-        if Username1_crossFollowers:
-            ids_list = sub1FollowersIds
-            if Username1_crossFollowing:
-                ids_list = list(set(ids_list).intersection(set(sub1FollowingIds)))
-            if Username2_crossFollowing:
-                ids_list = list(set(ids_list).intersection(set(sub2FollowingIds)))
-            if Username2_crossFollowers:
-                ids_list = list(set(ids_list).intersection(set(sub2FollowersIds)))           
+            elif Username1_crossFollowers:
+                ids_list = sub1FollowersIds
+                if Username1_crossFollowing:
+                    ids_list = list(set(ids_list).intersection(set(sub1FollowingIds)))
+                if Username2_crossFollowing:
+                    ids_list = list(set(ids_list).intersection(set(sub2FollowingIds)))
+                if Username2_crossFollowers:
+                    ids_list = list(set(ids_list).intersection(set(sub2FollowersIds)))           
                                             
         ids_list = list(set(ids_list).difference(set(sub0FollowingIds)).difference(set(sub0FollowersIds)))
         
@@ -157,11 +157,12 @@ def AJgetCrossUsers(request,Username1_crossFollowing,Username1_crossFollowers,Us
             while ii < len(ids_list):
                 followersIds_id_groups.append(ids_list[ii:min(ii + followersIds_GROUP_SIZE,len(ids_list))])
                 ii = ii + followersIds_GROUP_SIZE    
-        
+                
+            progressIncrements = int(60/len(followersIds_id_groups))
             chosenUsers = []
             for jj in range(len(followersIds_id_groups)):
                 print jj
-                curJob.crossUsersProgress = curJob.crossUsersProgress + '*'
+                curJob.crossUsersProgress = curJob.crossUsersProgress + progressIncrements
                 curJob.save()                                
                 rawData = useTwitterAPI.twitterLookupUser(twitter,user_id=', '.join([str(e) for e in followersIds_id_groups[jj]]),include_entities='false')
                 rawData_has_keys = [aCrossUser for aCrossUser in rawData if set(MY_KEYS).issubset(aCrossUser.keys())]
@@ -193,6 +194,11 @@ def AJgetCrossUsers(request,Username1_crossFollowing,Username1_crossFollowers,Us
                                  'P_validationDays':"{:,}".format(curJob.P_validationDays),'P_validationThreshold':curJob.P_validationThreshold})
     except:
         return simplejson.dumps({'result':0})
+    
+@dajaxice_register() 
+def AJgetCrossUsers_progress(request):
+    curJob = Job.objects.filter(userName=request.user)[0]
+    return simplejson.dumps({'progress':curJob.crossUsersProgress})
     
 @dajaxice_register()        
 def AJrecalculate(request,Following_Minimum,Following_Maximum,Followers_Minimum,Followers_Maximum,FF_Minimum,FF_Maximum,minNoTweets,maxDays):
@@ -259,4 +265,15 @@ def AJselectUsers(request,Following_Minimum,Following_Maximum,Followers_Minimum,
     curJob.jobStep = 2
     curJob.save()
         
+    return simplejson.dumps({'result':1})
+
+@dajaxice_register()        
+def AJcancel(request):
+    Jobs = Job.objects.filter(userName=request.user)
+    if Jobs:
+        currentJob = Jobs[0]                
+        toDeleteCrossDatas = CrossData.objects.filter(job=currentJob) 
+        for toDeleteCrossData in toDeleteCrossDatas:
+            toDeleteCrossData.delete()  
+        currentJob.delete()             
     return simplejson.dumps({'result':1})

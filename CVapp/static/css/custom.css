@@ -10,6 +10,7 @@ body {
 
 .brand {
 	cursor: default;
+	font-family: "Comic Sans MS";
 }
 
 #footer {
@@ -38,6 +39,11 @@ body { padding-top: 40px; }
 #filter_params {
 	border:2px solid;
 	border-radius:25px;
+}
+
+#cancel {
+	cursor: pointer;
+	margin: 10px 0 10px 0;
 }
 
 /* CUSTOMIZE THE MODALS

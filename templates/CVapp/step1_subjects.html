@@ -18,7 +18,7 @@
        	     
         	<div class="row-fluid">
         		<div class="span3 offset2 text-center">
-        			<input id="inputUsername1" name="subject1Name" placeholder="a twitter username" type="text" /><img id="subject1go" height="35" width="35" src="{% static 'img/arrow-right.png' %}">
+        			<input id="inputUsername1" name="subject1Name" placeholder="1st opinion-leader username" type="text" /><img id="subject1go" height="35" width="35" src="{% static 'img/arrow-right.png' %}">
         			<p id="outputUsername1_message"></p>
         			<div id="outputUsername1">        				
         				<p id="outputUsername1_name"></p>
@@ -36,7 +36,7 @@
         			</div>
         		</div>
         		<div class="span3 offset3 text-center">
-        			<input id="inputUsername2" name="subject2Name" placeholder="another twitter username" type="text" /><img id="subject2go" height="35" width="35" src="{% static 'img/arrow-right.png' %}">
+        			<input id="inputUsername2" name="subject2Name" placeholder="2nd opinion-leader username" type="text" /><img id="subject2go" height="35" width="35" src="{% static 'img/arrow-right.png' %}">
         			<p id="outputUsername2_message"></p>
         			<div id="outputUsername2">        				
         				<p id="outputUsername2_name"></p>
@@ -58,6 +58,7 @@
         		<div class="span6 offset3 text-center">
         			<img id="toStep2" height="50" width="50" src="{% static 'img/arrow-down.png' %}">
         			<img id="toStep2_loading" height="50" width="50" src="{% static 'img/loading.gif' %}">
+        			<br />
         			<p id="toStep2_message"></p>
         		</div>
         	</div>
@@ -68,7 +69,7 @@
                 <div class="hero-content">
                     <div class="row-fluid">
                         <div class="span12 text-center">                        	
-                            <p id="target_stage2">Found cross-users between the followers and the following.<br />Now you can apply some quick filters to focus on your early adopters.</p>
+                            <p id="target_stage2">Intersection between followers and following is complete.<br />Now you can apply some quick filters to focus on your early adopters.</p>
                         </div>
                     </div>                        
                 </div>
@@ -79,7 +80,7 @@
         	<div class="row-fluid text-center">
         		<h2>Filtering parameters</h2>
         		<div class="span10 offset1 text-center">
-					<h4>Cross analysis: <strong><span id="crossNum"></span></strong> potential early adopters found</h4>        							
+					<h4>Applying filters: <strong><span id="crossNum"></span></strong> potential early adopters found</h4>        							
 			        <table class="table">
 				        <tr>
 				            <th><p></p></th>
@@ -90,6 +91,7 @@
 		                    <td><p>Following</p></td>
 		                    <td>
 		                    	<select id="Following_Minimum">
+		                    	  <option>0</option>
 								  <option>10</option>
 								  <option>100</option>
 								  <option>500</option>
@@ -114,6 +116,7 @@
 	                    	<td><p>Followers</p></td>
 		                    <td>
 		                    	<select id="Followers_Minimum">
+		                    	  <option>0</option>
 								  <option>10</option>
 								  <option>100</option>
 								  <option>500</option>
@@ -138,6 +141,7 @@
 	                    	<td><p>Following/Followers ratio </p></td>
 		                    <td>
 		                    	<select id="FF_Minimum">
+		                    	  <option>0</option>
 								  <option>0.1</option>
 								  <option>0.3</option>
 								  <option>0.5</option>
@@ -169,6 +173,7 @@
 				<div class="span5 offset1 text-center">
 					<p>Minimum number of tweets</p>
 				     <select id="minNoTweets">
+				      <option>0</option>
 					  <option>10</option>
 					  <option>100</option>
 					  <option>500</option>
@@ -224,10 +229,13 @@
 				</div>				
 			</div>	
 			<div class="row-fluid">	
-				<div class="span8 offset2 text-center">
+				<div class="span6 text-center">
+					<img id="cancel" height="50" width="50" src="{% static 'img/cancel.png' %}">
+				</div>
+				<div class="span6 text-center">
 					<img id="toStep3" height="50" width="50" src="{% static 'img/arrow-down.png' %}">
 				</div>
-			</div>
+			</div>			
        </div>         
 		<section>
         
