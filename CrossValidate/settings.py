@@ -4,7 +4,7 @@ DEBUG = False
 TEMPLATE_DEBUG = False
 
 ADMINS = (
-	('Andrei Averkin', 'email@smoketestapp.com'),
+	('Andrei Averkin', 'email@mvptest.com'),
 )
 
 MANAGERS = ADMINS
@@ -12,9 +12,9 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'smoketes_crossvalidate',                      # Or path to database file if using sqlite3.
+        'NAME': 'andreii1_crossvalidate',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
-        'USER': 'smoketes_crossvalidate',
+        'USER': 'andreii1_crossvalidate',
         'PASSWORD': 'csar5248',
         'HOST': 'localhost',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         'PORT': '5432',                      # Set to empty string for default.
@@ -23,7 +23,7 @@ DATABASES = {
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ['www.smoketestapp.com','smoketestapp.com']
+ALLOWED_HOSTS = ['www.MVPtest.com','MVPtest.com']
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -35,7 +35,7 @@ TIME_ZONE = 'Asia/Jerusalem'
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
 
-SITE_ID = 2
+SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
@@ -61,7 +61,7 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = '/home4/smoketes/public_html/static/'
+STATIC_ROOT = '/home/andreii1/public_html/mvptest/static/'
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
@@ -109,7 +109,7 @@ ROOT_URLCONF = 'CrossValidate.urls'
 WSGI_APPLICATION = 'CrossValidate.wsgi.application'
 
 TEMPLATE_DIRS = (
-    '/home4/smoketes/django/CrossValidate/templates',                 
+    '/home/andreii1/django_projects/CrossValidate/templates',                 
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.

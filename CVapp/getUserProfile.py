@@ -1,3 +1,18 @@
+import time
+
+def profile_retry(func):
+    howmany = 10 # maximum retires
+    timeout = 3 # seconds
+    def tryIt(*fargs, **fkwargs):
+        for _ in xrange(howmany):
+            try: return func(*fargs, **fkwargs)
+            except (Exception) as e:
+                print e
+                print 'sleeping for ' + str(timeout) + ' seconds'
+                time.sleep(timeout)
+    return tryIt  
+
+@profile_retry
 def getUserProfile(userName):
     import urllib
     import re

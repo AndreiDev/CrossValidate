@@ -240,14 +240,14 @@ $(document).ready(function () {
 			$('#minNoTweets').val(data.P_minNoTweets);
 			$('#maxDays').val(data.P_maxDays);
 			$('#validationDays').val(data.P_validationDays);
-			$('#validationThreshold').val(data.P_validationThreshold);
-	
+			$('#validationThreshold').val(data.P_validationThreshold);	
 		}
 		else if (data.result == 0){			
 			$('#toStep2').show("slow");
 			$('#toStep2_loading').hide("slow");
 			$('#toStep2_message').text('Please try again in 15 minutes');
 			$('#toStep2_message').show("slow");
+			setTimeout(function(){window.location.reload();},5000)
 		}		   	
 		else if (data.result == 2){
 			$('#inputUsername2').prop('disabled', true);
@@ -292,8 +292,8 @@ $(document).ready(function () {
 		}	
 		NumOfFetches = userFollowingN+userFollowersN+sub1FollowingN*Username1_crossFollowing+sub1FollowersN*Username1_crossFollowers+sub2FollowingN*Username2_crossFollowing+sub2FollowersN*Username2_crossFollowers;
 		if (NumOfFetches <= 15) {
-			$('#inputUsername2').prop('disabled', true);
 			$('#inputUsername1').prop('disabled', true);
+			$('#inputUsername2').prop('disabled', true);
 			$('input[name=outputUsername1_cross]:radio').prop('disabled', true);
 			$('input[name=outputUsername2_cross]:radio').prop('disabled', true);
 			$('#subject1go').hide("slow");
@@ -316,9 +316,10 @@ $(document).ready(function () {
 
 	function refreshCrossNum(data){
 		$('#crossNum').text(data.crossNum);
-	}
+	};
 	
-	$('#stage2 select').click(function(){
+	function reCalculate(){
+    	$("body").css("cursor", "progress");		
     	Dajaxice.CVapp.AJrecalculate(refreshCrossNum,{
     	'Following_Minimum':$('#Following_Minimum').val(),
     	'Following_Maximum':$('#Following_Maximum').val(),
@@ -327,9 +328,14 @@ $(document).ready(function () {
     	'FF_Minimum':$('#FF_Minimum').val(),
     	'FF_Maximum':$('#FF_Maximum').val(),
     	'minNoTweets':$('#minNoTweets').val(),
-    	'maxDays':$('#maxDays').val()}
-    	)		
-	})
+    	'maxDays':$('#maxDays').val()}    	   	
+    	);
+    	$("body").css("cursor", "default"); 
+    };		
+	
+	$('#stage2 select').change(function(){
+		reCalculate();
+	});
     
 	function openStage3(data){
 		if (data.result){			

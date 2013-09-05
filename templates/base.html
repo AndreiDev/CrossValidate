@@ -9,7 +9,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>CrossValidate | {% block title %}Homepage{% endblock%}</title>
+        <title>MVPtest | {% block title %}Homepage{% endblock%}</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
@@ -40,7 +40,7 @@
 	                <span class="icon-bar"></span>
 	                <span class="icon-bar"></span>
 	            </a>
-	            <a class="brand"><img height="35px" width="35px" src="{% static 'img/crossValidateLogoWhite_small.png' %}" />CrossValidate (Beta version)</a>
+	            <a class="brand"><img height="35px" width="35px" src="{% static 'img/crossValidateLogoWhite_small.png' %}" />MVPtest (Beta version)</a>
 	            <div class="nav-collapse collapse" id="main-menu">
 	                <ul class="nav" id="main-menu-left">
 	
@@ -52,7 +52,7 @@
 	                    {% if user.is_authenticated %}
 	                    <li><a href="{% url 'account_logout' %}">Sign Out {{ user }}</a></li>
 	                    {% else %}
-	                    <li><a href="/accounts/twitter/login/">Start a CrossValidate plan</a></li>
+	                    <li><a href="/accounts/twitter/login/">Start a MVPtest plan</a></li>
 	                    {% endif %}
 	                </ul>
 	            </div>
@@ -88,8 +88,8 @@
 					<div class="nav-collapse collapse">
 						<ul class="nav">
 							<li class="span4"><p></p>
-							<li class="span4"><a href="mailto:andrei@crossValidate.com?Subject=Hi%20Andrei" target="_top">Drop me an Email</a></li>	
-                            <li class="span4"><a href="#FAQ" role="button" data-toggle="modal">CrossValidate FAQ</a></li>	
+							<li class="span4"><a href="mailto:email@MVPtest.com?Subject=Hi%20Andrei" target="_top">Drop me an Email</a></li>	
+                            <li class="span4"><a href="#FAQ" role="button" data-toggle="modal">MVPtest FAQ</a></li>	
                             <li><a href="http://www.andreii.com" target="_blank" role="button" data-toggle="modal">Andrei Averkin 2013</a></li>	                            
 						</ul>
 					</div>
@@ -103,7 +103,7 @@
 		<div id="FAQ" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
 		  <div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			<h3 id="myModalLabel1">CrossValidate FAQ</h3>
+			<h3 id="myModalLabel1">MVPtest FAQ</h3>
 		  </div>
 		  <div class="modal-body">
 			<div class="accordion" id="accordion2">
@@ -137,12 +137,12 @@
 			  <div class="accordion-group">
 			    <div class="accordion-heading">
 			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse3">
-			        Why do I have to wait 15 minutes between CrossValidate plans?
+			        Why do I have to wait 15 minutes between MVPtest plans?
 			      </a>
 			    </div>
 			    <div id="collapse3" class="accordion-body collapse">
 			      <div class="accordion-inner">
-			        Twitter API allows a 15 minute window per user. Thus, after each CrossValidate plan, you will have to wait 15 minuters for Twitter to reset your API usage.
+			        Twitter API allows a 15 minute window per user. Thus, after each MVPtest plan, you will have to wait 15 minuters for Twitter to reset your API usage.
 			      </div>
 			    </div>
 			  </div>
@@ -155,8 +155,8 @@
 			    <div id="collapse4" class="accordion-body collapse">
 			      <div class="accordion-inner">
 			        That means you are trying to intersect huge groups of followers and following (or that your account is rich in followers or following).
-			        Currently, CrossValidate is designed for relativly new accounts, so if you have an account with large following or followers numbers (more then 5,000), 
-			        your usage of CrossValidate will be less effective. Try changing the intersection parameters to avoid intersection with large groups (more then 25,000).
+			        Currently, MVPtest is designed for relativly new accounts, so if you have an account with large following or followers numbers (more then 5,000), 
+			        your usage of MVPtest will be less effective. Try changing the intersection parameters to avoid intersection with large groups (more then 25,000).
 			      </div>
 			    </div>
 			  </div>	
@@ -169,8 +169,8 @@
 			    <div id="collapse5" class="accordion-body collapse">
 			      <div class="accordion-inner">
 			        That means you are trying to intersect huge groups of followers and following (or that your account is rich in followers or following).
-			        Currently, CrossValidate is designed for relativly new accounts, so if you have an account with large following or followers numbers (more then 5,000), 
-			        your usage of CrossValidate will be less effective. Try changing the intersection parameters to avoid intersection with large groups (more then 25,000).
+			        Currently, MVPtest is designed for relativly new accounts, so if you have an account with large following or followers numbers (more then 5,000), 
+			        your usage of MVPtest will be less effective. Try changing the intersection parameters to avoid intersection with large groups (more then 25,000).
 			      </div>
 			    </div>
 			  </div>
@@ -182,7 +182,7 @@
 			    </div>
 			    <div id="collapse6" class="accordion-body collapse">
 			      <div class="accordion-inner">
-					CrossValidate starts to follow the "early adopters" after you choose them. Currently, it follows them one every 30 minutes in order to prevent bulk following
+					MVPtest starts to follow the "early adopters" after you choose them. Currently, it follows them one every 30 minutes in order to prevent bulk following
 					which is prohibited by Twitter.  
 			      </div>
 			    </div>

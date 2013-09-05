@@ -35,9 +35,11 @@ def FollowUserById():
         
             # get Friends and Followers IDs    
             userID = User.objects.filter(username=job.userName)[0].id
+            if not SocialAccount.objects.filter(user_id=userID):
+                continue
             SocialAccountId = SocialAccount.objects.filter(user_id=userID)[0].id 
-            APP_KEY = SocialApp.objects.filter(name='AndreiiTest')[0].client_id 
-            APP_SECRET = SocialApp.objects.filter(name='AndreiiTest')[0].secret
+            APP_KEY = SocialApp.objects.filter(name='MVPtest')[0].client_id 
+            APP_SECRET = SocialApp.objects.filter(name='MVPtest')[0].secret
             OAUTH_TOKEN = SocialToken.objects.filter(account_id=SocialAccountId)[0].token
             OAUTH_TOKEN_SECRET = SocialToken.objects.filter(account_id=SocialAccountId)[0].token_secret
                               
