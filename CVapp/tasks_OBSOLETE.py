@@ -1,5 +1,5 @@
 from models import Job, CrossData
-from celery import task
+#from celery import task
 import time
 import useTwitterAPI
 from allauth.socialaccount.models import SocialLogin, SocialToken, SocialApp, SocialAccount
@@ -7,8 +7,9 @@ from twython import Twython, TwythonError, TwythonRateLimitError
 from django.contrib.auth.models import User
 import datetime
 from django.utils.timezone import utc
+from ajax import LOGJob, LOGCrossData
 
-@task()
+#@task()
 def FollowUserById():
     MAX_DAYS_TO_DELETE_JOB = 90
     jobs = Job.objects.all()
@@ -83,6 +84,9 @@ def FollowUserById():
             else:
                 job.validationRatio = float(len(CrossData.objects.filter(job=job).exclude(followBackTime=None)))/float(len(CrossData.objects.filter(job=job).exclude(followTime=None)))
             job.save()
+            LOGJob(job)
+            LOGCrossData(job) 
+            
         else:
             # add Unfollowing algorithm
             continue    		

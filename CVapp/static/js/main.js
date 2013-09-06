@@ -16,14 +16,14 @@ $(document).ready(function () {
 	var Username2_crossFollowers = 0;	
 	var NumOfFetches = 0
 
-	$('#outputUsername1_message').hide("slow");
-	$('#outputUsername1').hide("slow");	
-	$('#outputUsername2_message').hide("slow");
-	$('#outputUsername2').hide("slow");	
-	$('#toStep2').hide("slow");
-	$('#toStep2_loading').hide("slow");
-	$('#toStep2_message').hide("slow");
-	$('#stage2').hide("slow");	
+	$('#outputUsername1_message').hide();
+	$('#outputUsername1').hide();	
+	$('#outputUsername2_message').hide();
+	$('#outputUsername2').hide();	
+	$('#toStep2').hide();
+	$('#toStep2_loading').hide();
+	$('#toStep2_message').hide();
+	$('#stage2').hide();	
 	
 	// Waiting for rate-limit reset
 	function checkRateLimits(data){		
@@ -348,7 +348,7 @@ $(document).ready(function () {
     	);
     };		
 	
-	$('#stage2 select').change(function(){
+	$('#filter_params select').change(function(){
 		reCalculate();
 	});
     

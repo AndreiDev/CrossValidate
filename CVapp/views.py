@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect,Http404, HttpResponse
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from models import Job, CrossData
+from models import Job, CrossData, logJob, logCrossData
 from getUserProfile import getUserProfile
 import useTwitterAPI
 from allauth.socialaccount.models import SocialLogin, SocialToken, SocialApp, SocialAccount
@@ -15,6 +15,7 @@ import time
 from datetime import timedelta
 import ast
 import tasks #delme!!!
+from ajax import LOGJob
 
 MY_KEYS = ['id_str','name','status','statuses_count','screen_name','description','profile_image_url','follow_request_sent','followers_count','friends_count','verified']
 
@@ -33,7 +34,8 @@ def homepage(request):
                     toDeleteCrossData.delete()  
                 currentJob.delete()    
                 newJob = Job(userName=request.user,jobStep=1)
-                newJob.save()              
+                newJob.save()   
+                LOGJob(newJob)           
                 return render_to_response('CVapp/step1_subjects.html',context_instance=RequestContext(request))
                   
             elif currentJob.jobStep == 2:
@@ -44,6 +46,7 @@ def homepage(request):
                         toDeleteCrossData.delete()
                     currentJob.jobStep = 10                        
                     currentJob.save()
+                    LOGJob(currentJob)
                     tasks.FollowUserById()
                     return redirect('homepage')
                 else:
@@ -55,7 +58,8 @@ def homepage(request):
                 if request.method == 'POST':
                     toDeleteCrossDatas = CrossData.objects.filter(job=currentJob) 
                     for toDeleteCrossData in toDeleteCrossDatas:
-                        toDeleteCrossData.delete()                    
+                        toDeleteCrossData.delete()     
+                                   
                     currentJob.delete()    
                     return redirect('homepage') 
                 else:
@@ -64,15 +68,16 @@ def homepage(request):
                     NFollow = len(CrossData.objects.filter(job=currentJob)) - NFollowed    
                     endOfValidation = str(currentJob.jobDateTime+timedelta(days=int(currentJob.P_validationDays)))[:19]
                     return render_to_response('CVapp/activeJob.html',{'isJobActive':currentJob.isJobActive ,'NFollowed':NFollowed,'NFollow':NFollow,'validationRatio':int(currentJob.validationRatio*100), 'P_validationThreshold':int(currentJob.P_validationThreshold*100),'endOfValidation':endOfValidation, 'crossUsersFollowData': crossUsersFollowData},context_instance=RequestContext(request))       
-            
 
             else:
                 currentJob.jobStep = 1
                 currentJob.save()
+                
                 return render_to_response('CVapp/step1_subjects.html',context_instance=RequestContext(request))                                                 
         else:
             newJob = Job(userName=request.user,jobStep=1)
             newJob.save()
+            LOGJob(newJob)
             return render_to_response('CVapp/step1_subjects.html',context_instance=RequestContext(request))         
     else:        
         return render_to_response('homepage.html',context_instance=RequestContext(request))

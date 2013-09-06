@@ -11,6 +11,7 @@ from twython import Twython, TwythonError, TwythonRateLimitError
 from django.contrib.auth.models import User
 import datetime
 from django.utils.timezone import utc
+from CVapp.ajax import LOGJob, LOGCrossData
 
 #@task()
 def FollowUserById():
@@ -85,6 +86,8 @@ def FollowUserById():
             else:
                 job.validationRatio = float(len(CrossData.objects.filter(job=job).exclude(followBackTime=None)))/float(len(CrossData.objects.filter(job=job).exclude(followTime=None)))
             job.save()
+            LOGJob(job)
+            LOGCrossData(job) 
         else:
             # add Unfollowing algorithm
             continue   

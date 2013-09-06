@@ -1,6 +1,6 @@
 from django.utils import simplejson
 from dajaxice.decorators import dajaxice_register
-from models import Job, CrossData
+from models import Job, CrossData, logJob, logCrossData
 from django.contrib.auth.models import User
 from getUserProfile import getUserProfile
 
@@ -174,6 +174,7 @@ def AJgetCrossUsers(request,Username1_crossFollowing,Username1_crossFollowers,Us
         
         curJob.crossUsersRelevantData = chosenUsers
         curJob.save()   
+        LOGJob(curJob)
 
         rawData_relevant = chosenUsers
         rawData_filtered = [aCrossUser for aCrossUser in rawData_relevant if (int(aCrossUser['followers_count'])>int(curJob.P_minFollowers) and 
@@ -259,11 +260,13 @@ def AJselectUsers(request,Following_Minimum,Following_Maximum,Followers_Minimum,
         newCrossUser = CrossData(job = curJob, id_str = crossUser['id_str'], name = crossUser['name'], screenName = crossUser['screen_name'], 
                                 description = crossUser['description'], imageLink = crossUser['profile_image_url'], 
                                 statusesCount = crossUser['statuses_count'], followersCount = crossUser['followers_count'], 
-                                friendsCount = crossUser['friends_count'], toFollow = True)
-        newCrossUser.save() 
+                                friendsCount = crossUser['friends_count'], toFollow = True)        
+        newCrossUser.save()
+    LOGCrossData(curJob) 
          
     curJob.jobStep = 2
     curJob.save()
+    LOGJob(curJob)
         
     return simplejson.dumps({'result':1})
 
@@ -275,5 +278,26 @@ def AJcancel(request):
         toDeleteCrossDatas = CrossData.objects.filter(job=currentJob) 
         for toDeleteCrossData in toDeleteCrossDatas:
             toDeleteCrossData.delete()  
+            
         currentJob.delete()             
     return simplejson.dumps({'result':1})
+
+def LOGJob(curJob):
+    #curLogJob = logJob.objects.filter(jobId=curJob.id)
+    #if curLogJob:
+    #    curLogJob.delete()
+    
+    newLogJob = logJob(jobId = curJob.id,jobDateTime=curJob.jobDateTime,jobStep=curJob.jobStep,userName=curJob.userName,subject1Name=curJob.subject1Name,subject2Name=curJob.subject2Name,userNoFollowing=curJob.userNoFollowing,userNoFollowers=curJob.userNoFollowers,subject1NoFollowers=curJob.subject1NoFollowers,subject1NoFollowing=curJob.subject1NoFollowing,subject2NoFollowing=curJob.subject2NoFollowing,subject2NoFollowers=curJob.subject2NoFollowers,crossUsersProgress=curJob.crossUsersProgress,crossUsersRelevantData=curJob.crossUsersRelevantData,isJobActive=curJob.isJobActive,validationRatio=curJob.validationRatio,P_crossType=curJob.P_crossType,P_minFollowers=curJob.P_minFollowers,P_maxFollowers=curJob.P_maxFollowers,P_minFriends=curJob.P_minFriends,P_maxFriends=curJob.P_maxFriends,P_minFFratio=curJob.P_minFFratio,P_maxFFratio=curJob.P_maxFFratio,P_minNoTweets=curJob.P_minNoTweets,P_maxDays=curJob.P_maxDays,P_validationDays=curJob.P_validationDays,P_validationThreshold=curJob.P_validationThreshold)
+    newLogJob.save()
+    return 1        
+    
+def LOGCrossData(curJob):
+    curLogCrossUsers = logCrossData.objects.filter(jobId=curJob.id)
+    if curLogCrossUsers:
+        curLogCrossUsers.delete()
+    
+    for curCrossData in CrossData.objects.filter(job=curJob):
+        newLogCrossData = logCrossData(jobId=curCrossData.job_id,id_str=curCrossData.id_str,name=curCrossData.name,screenName=curCrossData.screenName,description=curCrossData.description,imageLink=curCrossData.imageLink,statusesCount=curCrossData.statusesCount,followersCount=curCrossData.followersCount,friendsCount=curCrossData.friendsCount,toFollow=curCrossData.toFollow,followTime=curCrossData.followTime,followBackTime=curCrossData.followBackTime,toUnfollow=curCrossData.toUnfollow,unFollowTime=curCrossData.unFollowTime)
+        newLogCrossData.save()
+
+    return 1
