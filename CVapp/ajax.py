@@ -263,28 +263,12 @@ def AJselectUsers(request,Following_Minimum,Following_Maximum,Followers_Minimum,
                                 friendsCount = crossUser['friends_count'], toFollow = True)        
         newCrossUser.save()
     LOGCrossData(curJob) 
-    
-    if len(CrossData.objects.filter(job=curJob)) > 20:
-        curJob.jobStep = 2 # choosing free/premium plan
-    else:
-        curJob.jobStep = 3 # choosing CrossUsers in free plan
+         
+    curJob.jobStep = 2
     curJob.save()
     LOGJob(curJob)
         
     return simplejson.dumps({'result':1})
-
-
-@dajaxice_register()        
-def AJfreePlan(request):
-    Jobs = Job.objects.filter(userName=request.user)
-    if Jobs:
-        currentJob = Jobs[0]                
-        toDeleteCrossDatas = CrossData.objects.filter(job=currentJob).order_by('followersCount')[20:]
-        for toDeleteCrossData in toDeleteCrossDatas:
-            toDeleteCrossData.delete()
-        currentJob.jobStep = 3                        
-        currentJob.save()
-        LOGJob(currentJob)
 
 @dajaxice_register()        
 def AJcancel(request):
@@ -303,7 +287,7 @@ def LOGJob(curJob):
     #if curLogJob:
     #    curLogJob.delete()
     
-    newLogJob = logJob(jobId = curJob.id,jobDateTime=curJob.jobDateTime,jobStep=curJob.jobStep,plan=curJob.plan,userName=curJob.userName,subject1Name=curJob.subject1Name,subject2Name=curJob.subject2Name,userNoFollowing=curJob.userNoFollowing,userNoFollowers=curJob.userNoFollowers,subject1NoFollowers=curJob.subject1NoFollowers,subject1NoFollowing=curJob.subject1NoFollowing,subject2NoFollowing=curJob.subject2NoFollowing,subject2NoFollowers=curJob.subject2NoFollowers,crossUsersProgress=curJob.crossUsersProgress,crossUsersRelevantData=curJob.crossUsersRelevantData,isJobActive=curJob.isJobActive,validationRatio=curJob.validationRatio,P_crossType=curJob.P_crossType,P_minFollowers=curJob.P_minFollowers,P_maxFollowers=curJob.P_maxFollowers,P_minFriends=curJob.P_minFriends,P_maxFriends=curJob.P_maxFriends,P_minFFratio=curJob.P_minFFratio,P_maxFFratio=curJob.P_maxFFratio,P_minNoTweets=curJob.P_minNoTweets,P_maxDays=curJob.P_maxDays,P_validationDays=curJob.P_validationDays,P_validationThreshold=curJob.P_validationThreshold)
+    newLogJob = logJob(jobId = curJob.id,jobDateTime=curJob.jobDateTime,jobStep=curJob.jobStep,userName=curJob.userName,subject1Name=curJob.subject1Name,subject2Name=curJob.subject2Name,userNoFollowing=curJob.userNoFollowing,userNoFollowers=curJob.userNoFollowers,subject1NoFollowers=curJob.subject1NoFollowers,subject1NoFollowing=curJob.subject1NoFollowing,subject2NoFollowing=curJob.subject2NoFollowing,subject2NoFollowers=curJob.subject2NoFollowers,crossUsersProgress=curJob.crossUsersProgress,crossUsersRelevantData=curJob.crossUsersRelevantData,isJobActive=curJob.isJobActive,validationRatio=curJob.validationRatio,P_crossType=curJob.P_crossType,P_minFollowers=curJob.P_minFollowers,P_maxFollowers=curJob.P_maxFollowers,P_minFriends=curJob.P_minFriends,P_maxFriends=curJob.P_maxFriends,P_minFFratio=curJob.P_minFFratio,P_maxFFratio=curJob.P_maxFFratio,P_minNoTweets=curJob.P_minNoTweets,P_maxDays=curJob.P_maxDays,P_validationDays=curJob.P_validationDays,P_validationThreshold=curJob.P_validationThreshold)
     newLogJob.save()
     return 1        
     
@@ -315,4 +299,5 @@ def LOGCrossData(curJob):
     for curCrossData in CrossData.objects.filter(job=curJob):
         newLogCrossData = logCrossData(jobId=curCrossData.job_id,id_str=curCrossData.id_str,name=curCrossData.name,screenName=curCrossData.screenName,description=curCrossData.description,imageLink=curCrossData.imageLink,statusesCount=curCrossData.statusesCount,followersCount=curCrossData.followersCount,friendsCount=curCrossData.friendsCount,toFollow=curCrossData.toFollow,followTime=curCrossData.followTime,followBackTime=curCrossData.followBackTime,toUnfollow=curCrossData.toUnfollow,unFollowTime=curCrossData.unFollowTime)
         newLogCrossData.save()
+
     return 1

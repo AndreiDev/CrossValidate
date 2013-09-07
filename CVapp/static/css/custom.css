@@ -13,13 +13,6 @@ body {
 	font-family: "Comic Sans MS";
 }
 
-.hero-content h1{
-	font-family: "Comic Sans MS";
-	font-size: 30px;
-	padding: 0 0 10px 0;
-	text-decoration: underline;
-}
-
 #footer {
 	padding: 20px 0 20px 0;
 }
@@ -51,51 +44,6 @@ body { padding-top: 40px; }
 #cancel {
 	cursor: pointer;
 	margin: 10px 0 10px 0;
-}
-
-.plans {
-	background-color:#2299ff;
-	-webkit-border-radius: 10px;
-	-moz-border-radius: 10px;
-	border-radius: 10px;
-	box-shadow: 10px 10px 5px #888888;
-	padding: 0 0 1em 0;
-	margin: 0 0 1em 0;
-}
-
-.plans #free {
-	margin: 0 0 1.2em 0;
-}
-
-.plans h1 {
-	font-size: 2em;
-	font-weight: bold;
-	font-family: "Comic Sans MS"
-}
-
-.plans p {
-	font-size: 1.2em;
-	color:#EEEEEE;
-
-}
-
-.plans .price {
-	color: #44ee44;
-	font-size: 1.8em;
-}
-
-.plans .under_price {
-	color: #222222;
-	font-size: 1em;
-}
-
-hr { 
-	display: block; 
-    height: 1px;
-    border-top: 1px solid black;
-    margin: 1em; 
-    padding: 0; 
-    background-color: black;
 }
 
 /* CUSTOMIZE THE MODALS

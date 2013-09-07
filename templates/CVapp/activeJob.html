@@ -9,12 +9,10 @@
                 <div class="hero-content">
                     <div class="row-fluid">
                         <div class="span12 text-center">
-                        	<h1>MPVtest Status Page</h1>
 		                    {% if isJobActive %}
 		                    	<p>By now your validation ratio is {{ validationRatio }}%</p>
 		                    	<p>Remember that your goal is to reach {{ P_validationThreshold }}%</p>
 		                    	<p>You have followed {{ NFollowed }} twitter users, {{ NFollow }} more to follow</p>
-		                    	
 		                    	<p>Your MVPtest will end at {{ endOfValidation }}</p>
 		                    {% else %}
 		                    	<p>MVPtest is over</p> 

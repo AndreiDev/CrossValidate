@@ -6,7 +6,6 @@ class Job(models.Model):
     
     jobDateTime = models.DateTimeField(auto_now_add=True)
     jobStep = models.IntegerField(editable=False)
-    plan = models.IntegerField(default=0)
     userName = models.CharField(max_length=15, validators=[alphanumeric])
     subject1Name = models.CharField(max_length=15,default='', validators=[alphanumeric])
     subject2Name = models.CharField(max_length=15,default='', validators=[alphanumeric])   
@@ -43,7 +42,6 @@ class logJob(models.Model):
     jobId = models.IntegerField(default=-1)
     jobDateTime = models.DateTimeField()
     jobStep = models.IntegerField(editable=False)
-    plan = models.IntegerField(default=0)
     userName = models.CharField(max_length=15, validators=[alphanumeric])
     subject1Name = models.CharField(max_length=15,default='', validators=[alphanumeric])
     subject2Name = models.CharField(max_length=15,default='', validators=[alphanumeric])   
