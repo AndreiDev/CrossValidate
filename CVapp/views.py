@@ -19,9 +19,6 @@ from ajax import LOGJob
 
 MY_KEYS = ['id_str','name','status','statuses_count','screen_name','description','profile_image_url','follow_request_sent','followers_count','friends_count','verified']
 
-def privacy(request):
-    return render_to_response('privacy.html')
-
 def homepage(request):
     if request.user.is_authenticated():
         Jobs = Job.objects.filter(userName=request.user)
@@ -39,6 +36,10 @@ def homepage(request):
                 return render_to_response('CVapp/step1_subjects.html',context_instance=RequestContext(request))
                   
             elif currentJob.jobStep == 2:
+                crossUsers = CrossData.objects.filter(job=currentJob)
+                return render_to_response('CVapp/step2_plans.html',{'NofCrossUsers': len(crossUsers)},context_instance=RequestContext(request))
+                                 
+            elif currentJob.jobStep == 3:
                 if request.method == 'POST':
                     FollowUsersList = request.POST.getlist('follow')
                     toDeleteCrossDatas = CrossData.objects.filter(job=currentJob).exclude(id_str__in=FollowUsersList) 
@@ -51,8 +52,8 @@ def homepage(request):
                     return redirect('homepage')
                 else:
                     crossUsersData = CrossData.objects.filter(job=currentJob).order_by('followersCount')
-                    return render_to_response('CVapp/step2_followUsers.html',{'crossUsersData': crossUsersData},context_instance=RequestContext(request))                 
-            
+                    return render_to_response('CVapp/step3_followUsers.html',{'crossUsersData': crossUsersData},context_instance=RequestContext(request))                 
+                        
             
             elif currentJob.jobStep == 10:
                 if request.method == 'POST':
@@ -81,3 +82,25 @@ def homepage(request):
             return render_to_response('CVapp/step1_subjects.html',context_instance=RequestContext(request))         
     else:        
         return render_to_response('homepage.html',context_instance=RequestContext(request))
+
+def plan1(request):
+    Jobs = Job.objects.filter(userName=request.user)
+    if Jobs:
+        currentJob = Jobs[0]                
+        toDeleteCrossDatas = CrossData.objects.filter(job=currentJob).order_by('followersCount')[100:]
+        for toDeleteCrossData in toDeleteCrossDatas:
+            toDeleteCrossData.delete()
+        currentJob.plan = 1
+        currentJob.jobStep = 3                        
+        currentJob.save()
+        LOGJob(currentJob)    
+    return redirect('homepage')
+def plan2(request):
+    Jobs = Job.objects.filter(userName=request.user)
+    if Jobs:
+        currentJob = Jobs[0]      
+        currentJob.plan = 2          
+        currentJob.jobStep = 3                        
+        currentJob.save()
+        LOGJob(currentJob)    
+    return redirect('homepage')    
