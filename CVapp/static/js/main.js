@@ -382,6 +382,14 @@ $(document).ready(function () {
 	    }
     });    
     
+   function freePlan(data){
+    	location.reload();
+    };
+    
+    $('#free').click(function(){
+    	Dajaxice.CVapp.AJfreePlan(freePlan);    
+    });
+    
     function cancelForm(data){
     	location.reload();
     };
