@@ -243,7 +243,6 @@ def AJselectUsers(request,Following_Minimum,Following_Maximum,Followers_Minimum,
     curJob.P_maxDays = maxDays   
     curJob.P_validationDays = validationDays
     curJob.P_validationThreshold = validationThreshold  
-    curJob.save()
 
     rawData_relevant = ast.literal_eval(curJob.crossUsersRelevantData)
     rawData_filtered = [aCrossUser for aCrossUser in rawData_relevant if (int(aCrossUser['followers_count'])>int(curJob.P_minFollowers) and 
@@ -268,6 +267,8 @@ def AJselectUsers(request,Following_Minimum,Following_Maximum,Followers_Minimum,
         curJob.jobStep = 2 # choosing free/premium plan
     else:
         curJob.jobStep = 3 # choosing CrossUsers in free plan
+    
+    curJob.crossUsersRelevantData = ''
     curJob.save()
     LOGJob(curJob)
         
@@ -303,7 +304,7 @@ def LOGJob(curJob):
     #if curLogJob:
     #    curLogJob.delete()
     
-    newLogJob = logJob(jobId = curJob.id,jobDateTime=curJob.jobDateTime,jobStep=curJob.jobStep,plan=curJob.plan,userName=curJob.userName,subject1Name=curJob.subject1Name,subject2Name=curJob.subject2Name,userNoFollowing=curJob.userNoFollowing,userNoFollowers=curJob.userNoFollowers,subject1NoFollowers=curJob.subject1NoFollowers,subject1NoFollowing=curJob.subject1NoFollowing,subject2NoFollowing=curJob.subject2NoFollowing,subject2NoFollowers=curJob.subject2NoFollowers,crossUsersProgress=curJob.crossUsersProgress,crossUsersRelevantData=curJob.crossUsersRelevantData,isJobActive=curJob.isJobActive,validationRatio=curJob.validationRatio,P_crossType=curJob.P_crossType,P_minFollowers=curJob.P_minFollowers,P_maxFollowers=curJob.P_maxFollowers,P_minFriends=curJob.P_minFriends,P_maxFriends=curJob.P_maxFriends,P_minFFratio=curJob.P_minFFratio,P_maxFFratio=curJob.P_maxFFratio,P_minNoTweets=curJob.P_minNoTweets,P_maxDays=curJob.P_maxDays,P_validationDays=curJob.P_validationDays,P_validationThreshold=curJob.P_validationThreshold)
+    newLogJob = logJob(jobId = curJob.id,jobDateTime=curJob.jobDateTime,jobStep=curJob.jobStep,plan=curJob.plan,userName=curJob.userName,subject1Name=curJob.subject1Name,subject2Name=curJob.subject2Name,userNoFollowing=curJob.userNoFollowing,userNoFollowers=curJob.userNoFollowers,subject1NoFollowers=curJob.subject1NoFollowers,subject1NoFollowing=curJob.subject1NoFollowing,subject2NoFollowing=curJob.subject2NoFollowing,subject2NoFollowers=curJob.subject2NoFollowers,crossUsersProgress=curJob.crossUsersProgress,crossUsersRelevantData='',isJobActive=curJob.isJobActive,validationRatio=curJob.validationRatio,P_crossType=curJob.P_crossType,P_minFollowers=curJob.P_minFollowers,P_maxFollowers=curJob.P_maxFollowers,P_minFriends=curJob.P_minFriends,P_maxFriends=curJob.P_maxFriends,P_minFFratio=curJob.P_minFFratio,P_maxFFratio=curJob.P_maxFFratio,P_minNoTweets=curJob.P_minNoTweets,P_maxDays=curJob.P_maxDays,P_validationDays=curJob.P_validationDays,P_validationThreshold=curJob.P_validationThreshold)
     newLogJob.save()
     return 1        
     
