@@ -263,10 +263,12 @@ def AJselectUsers(request,Following_Minimum,Following_Maximum,Followers_Minimum,
         newCrossUser.save()
     LOGCrossData(curJob) 
     
-    if len(CrossData.objects.filter(job=curJob)) > 20:
-        curJob.jobStep = 2 # choosing free/premium plan
-    else:
-        curJob.jobStep = 3 # choosing CrossUsers in free plan
+    #if len(CrossData.objects.filter(job=curJob)) > 20:
+    #    curJob.jobStep = 2 # choosing free/premium plan
+    #else:
+    #    curJob.jobStep = 3 # choosing CrossUsers in free plan
+        
+    curJob.jobStep = 3 # All Free
     
     curJob.crossUsersRelevantData = ''
     curJob.save()
