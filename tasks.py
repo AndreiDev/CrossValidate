@@ -1,6 +1,6 @@
-from django.core.management import setup_environ
+#from django.core.management import setup_environ
 import CrossValidate.settings
-setup_environ(CrossValidate.settings)
+#setup_environ(CrossValidate.settings)
 
 from CVapp.models import Job, CrossData
 #from celery import task

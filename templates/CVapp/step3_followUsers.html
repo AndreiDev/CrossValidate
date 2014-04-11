@@ -36,6 +36,8 @@
 	                    <td><p>{{ crossUserData.statusesCount }}</p></td>
 	                    <td><p>{{ crossUserData.friendsCount }}</p></td>
 	                    <td><p>{{ crossUserData.followersCount }}</p></td>
+	                    <td><a href="https://twitter.com/{{ crossUserData.screenName }}" class="twitter-follow-button" data-show-count="false" data-size="large" data-dnt="true">Follow @{{ crossUserData.screenName }}</a></td>
+						<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 	                    <td><label class="radio text-left">
 	                    	<input type="checkbox" name="follow" checked={{ crossUserData.toFollow }} value={{ crossUserData.id_str }}></input>
 	                    	</label>	
